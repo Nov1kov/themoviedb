@@ -1,0 +1,14 @@
+package ru.novikov.themoviedb.model;
+
+import org.json.JSONObject;
+
+/**
+ * Created by Ivan on 08.10.2016.
+ */
+
+public interface RemoteProviderCallBack {
+
+    void responseMovieDetail(Object obj);
+    void responsePopularMovies(Object obj);
+
+}

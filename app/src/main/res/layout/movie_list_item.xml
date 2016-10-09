@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="170dp"
+    app:cardUseCompatPadding="true"
+    android:layout_margin="3dp">
+
+    <ImageView
+        android:id="@+id/backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:background="@drawable/rating_circle"
+        android:layout_margin="3dp"
+        android:id="@+id/rating"
+        android:textSize="10dp"
+        android:textColor="@color/colorRating"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:gravity="center"
+        android:layout_gravity="right|top"/>
+
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            android:textSize="14dp"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/overview"
+            android:maxLines="2"
+            android:textSize="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        
+        <TextView
+            android:id="@+id/year"
+            android:textSize="14dp"
+            android:gravity="right"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
