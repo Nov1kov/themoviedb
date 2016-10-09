@@ -4,15 +4,18 @@ import android.content.Context;
 
 import java.util.List;
 
-import ru.novikov.themoviedb.model.Entity.Movie;
-import ru.novikov.themoviedb.view.MovieDetailView;
-import ru.novikov.themoviedb.view.MoviesListView;
+import ru.novikov.themoviedb.model.entity.Movie;
+import ru.novikov.themoviedb.presenter.basepresenters.MovieDetailPresenter;
+import ru.novikov.themoviedb.presenter.basepresenters.PresenterFragment;
+import ru.novikov.themoviedb.view.baseviews.MovieDetailView;
 
 /**
  * Created by Ivan on 08.10.2016.
  */
 
 public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView> implements MovieDetailPresenter {
+
+    private Movie mCurrentMovie;
 
     @Override
     public void onAttach(Context context) {
@@ -28,6 +31,11 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
     }
 
     @Override
+    public Movie getCurrentMovie() {
+        return mCurrentMovie;
+    }
+
+    @Override
     public void onCreate() {
 
     }
@@ -39,6 +47,7 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
 
     @Override
     public void responseMovieDetail(Movie movie) {
+        mCurrentMovie = movie;
         view.updateInfo(movie);
     }
 

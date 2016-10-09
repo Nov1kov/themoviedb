@@ -1,4 +1,4 @@
-package ru.novikov.themoviedb.model.Entity;
+package ru.novikov.themoviedb.model.entity;
 
 /**
  * Created by Ivan on 09.10.2016.

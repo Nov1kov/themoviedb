@@ -1,4 +1,6 @@
-package ru.novikov.themoviedb.presenter;
+package ru.novikov.themoviedb.presenter.basepresenters;
+
+import ru.novikov.themoviedb.model.entity.Movie;
 
 /**
  * Created by Ivan on 08.10.2016.
@@ -7,5 +9,6 @@ package ru.novikov.themoviedb.presenter;
 public interface MovieDetailPresenter extends Presenter {
 
     void loadMovie(int movieId);
+    Movie getCurrentMovie();
 
 }

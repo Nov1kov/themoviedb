@@ -1,4 +1,4 @@
-package ru.novikov.themoviedb.view;
+package ru.novikov.themoviedb.view.baseviews;
 
 /**
  * Created by Ivan on 08.10.2016.

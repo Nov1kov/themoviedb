@@ -4,8 +4,11 @@ import android.content.Context;
 
 import java.util.List;
 
-import ru.novikov.themoviedb.model.Entity.Movie;
-import ru.novikov.themoviedb.view.MoviesListView;
+import ru.novikov.themoviedb.App;
+import ru.novikov.themoviedb.model.entity.Movie;
+import ru.novikov.themoviedb.presenter.basepresenters.MoviesListPresenter;
+import ru.novikov.themoviedb.presenter.basepresenters.PresenterFragment;
+import ru.novikov.themoviedb.view.baseviews.MoviesListView;
 
 /**
  * Created by Ivan on 08.10.2016.
@@ -24,6 +27,11 @@ public class MoviesListPresenterImpl extends PresenterFragment<MoviesListView> i
     @Override
     public void loadList() {
         getDataProvider().getPopularMovies(1);
+    }
+
+    @Override
+    public void clearListeners() {
+        App.getInstance().getDataProvider().clearListeners();
     }
 
     @Override

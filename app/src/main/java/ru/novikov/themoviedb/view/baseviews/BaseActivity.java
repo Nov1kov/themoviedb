@@ -1,12 +1,11 @@
-package ru.novikov.themoviedb.view;
+package ru.novikov.themoviedb.view.baseviews;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import ru.novikov.themoviedb.presenter.Presenter;
-import ru.novikov.themoviedb.presenter.PresenterFragment;
+import ru.novikov.themoviedb.presenter.basepresenters.Presenter;
 
 /**
  * Created by Ivan on 08.10.2016.

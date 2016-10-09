@@ -21,8 +21,7 @@
         <activity
             android:name=".view.MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
-            android:parentActivityName=".view.MoviesListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".view.MoviesListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.novikov.themoviedb.view.MoviesListActivity" />

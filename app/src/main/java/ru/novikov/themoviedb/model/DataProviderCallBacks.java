@@ -2,7 +2,7 @@ package ru.novikov.themoviedb.model;
 
 import java.util.List;
 
-import ru.novikov.themoviedb.model.Entity.Movie;
+import ru.novikov.themoviedb.model.entity.Movie;
 
 /**
  * Created by Ivan on 09.10.2016.

@@ -7,11 +7,14 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
+import ru.novikov.themoviedb.App;
 import ru.novikov.themoviedb.R;
-import ru.novikov.themoviedb.model.Entity.Movie;
-import ru.novikov.themoviedb.presenter.MoviesListPresenter;
+import ru.novikov.themoviedb.model.entity.Movie;
+import ru.novikov.themoviedb.presenter.basepresenters.MoviesListPresenter;
 import ru.novikov.themoviedb.presenter.MoviesListPresenterImpl;
 import ru.novikov.themoviedb.view.adapters.PopulateMoviesListAdapter;
+import ru.novikov.themoviedb.view.baseviews.BaseActivity;
+import ru.novikov.themoviedb.view.baseviews.MoviesListView;
 
 public class MoviesListActivity extends BaseActivity<MoviesListPresenter> implements MoviesListView, PopulateMoviesListAdapter.OnClickListListener {
 
@@ -61,4 +64,9 @@ public class MoviesListActivity extends BaseActivity<MoviesListPresenter> implem
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.clearListeners();
+    }
 }

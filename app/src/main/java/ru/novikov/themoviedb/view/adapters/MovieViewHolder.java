@@ -1,28 +1,28 @@
 package ru.novikov.themoviedb.view.adapters;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.text.BreakIterator;
-
+import ru.novikov.themoviedb.App;
 import ru.novikov.themoviedb.R;
-import ru.novikov.themoviedb.model.Entity.Movie;
+import ru.novikov.themoviedb.model.ImageLoadListenerController;
+import ru.novikov.themoviedb.model.entity.Movie;
 
 /**
  * Created by Ivan on 09.10.2016.
  */
 
-public class MovieViewHolder extends RecyclerView.ViewHolder {
+public class MovieViewHolder extends RecyclerView.ViewHolder implements ImageLoadListenerController.BitmapListener {
 
     private final ImageView mBackDrop;
     private final TextView mTitle;
     private final TextView mOverview;
     private final TextView mYear;
     private final TextView mRating;
+    private final int mImageHeight;
 
     private Movie mMovieEntity;
 
@@ -36,6 +36,8 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
         mOverview = (TextView) itemView.findViewById(R.id.overview);
         mYear = (TextView) itemView.findViewById(R.id.year);
         mRating = (TextView) itemView.findViewById(R.id.rating);
+
+        mImageHeight = mBackDrop.getContext().getResources().getDimensionPixelSize(R.dimen.movie_item_backdrop_height);
     }
 
     public void bind(Movie movie) {
@@ -44,6 +46,9 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
         mYear.setText(movie.releaseDate);
         mOverview.setText(movie.overview);
         mRating.setText(String.format("%.1f", movie.voteAverage));
+        mBackDrop.setImageBitmap(null);
+        App.getInstance().getDataProvider().getImage(movie.backdropPath,
+                mBackDrop.getWidth(), mImageHeight, this);
     }
 
     public void setmListItemClickListener(PopulateMoviesListAdapter.OnClickListListener listItemClickListener) {
@@ -58,4 +63,8 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
         mListItemClickListener = listItemClickListener;
     }
 
+    @Override
+    public void onResponseBitmap(Bitmap bitmap) {
+        mBackDrop.setImageBitmap(bitmap);
+    }
 }

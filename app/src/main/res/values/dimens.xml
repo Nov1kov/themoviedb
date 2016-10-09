@@ -1,8 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
+    <dimen name="movie_item_circle_size">26dp</dimen>
+    <dimen name="movie_item_rating_text_size">10dp</dimen>
+    <dimen name="movie_item_rating_margin">3dp</dimen>
+    <dimen name="movie_item_title_text_size">14dp</dimen>
+    <dimen name="movie_item_overview_text_size">8dp</dimen>
+    <dimen name="movie_item_year_text_size">14dp</dimen>
+    <dimen name="movie_item_margin">3dp</dimen>
+    <dimen name="movie_item_height">170dp</dimen>
+    <dimen name="movie_detail_rating_circle_size">30dp</dimen>
+    <dimen name="movie_detail_tagline_text_size">8dp</dimen>
+    <dimen name="movie_detail_overview_text_size">10dp</dimen>
+    <dimen name="movie_detail_genres_title_text_size">12dp</dimen>
+    <dimen name="movie_detail_genres_text_size">10dp</dimen>
+    <dimen name="movie_detail_countries_title_text_size">12dp</dimen>
+    <dimen name="movie_detail_countries_text_size">10dp</dimen>
+    <dimen name="movie_detail_homepage_height">28dp</dimen>
+    <dimen name="movie_item_backdrop_height">95dp</dimen>
 </resources>

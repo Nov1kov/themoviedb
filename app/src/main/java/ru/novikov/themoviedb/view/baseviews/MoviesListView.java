@@ -1,8 +1,8 @@
-package ru.novikov.themoviedb.view;
+package ru.novikov.themoviedb.view.baseviews;
 
 import java.util.List;
 
-import ru.novikov.themoviedb.model.Entity.Movie;
+import ru.novikov.themoviedb.model.entity.Movie;
 
 /**
  * Created by Ivan on 08.10.2016.

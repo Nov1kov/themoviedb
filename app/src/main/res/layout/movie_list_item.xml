@@ -3,23 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="@dimen/movie_item_height"
     app:cardUseCompatPadding="true"
-    android:layout_margin="3dp">
+    android:layout_margin="@dimen/movie_item_margin">
 
     <ImageView
         android:id="@+id/backdrop"
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/movie_item_backdrop_height" />
 
     <TextView
         android:background="@drawable/rating_circle"
-        android:layout_margin="3dp"
+        android:layout_margin="@dimen/movie_item_rating_margin"
         android:id="@+id/rating"
-        android:textSize="10dp"
+        android:textSize="@dimen/movie_item_rating_text_size"
         android:textColor="@color/colorRating"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="@dimen/movie_item_circle_size"
+        android:layout_height="@dimen/movie_item_circle_size"
         android:gravity="center"
         android:layout_gravity="right|top"/>
 
@@ -31,7 +32,7 @@
 
         <TextView
             android:id="@+id/title"
-            android:textSize="14dp"
+            android:textSize="@dimen/movie_item_title_text_size"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,13 +41,13 @@
         <TextView
             android:id="@+id/overview"
             android:maxLines="2"
-            android:textSize="8dp"
+            android:textSize="@dimen/movie_item_overview_text_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         
         <TextView
             android:id="@+id/year"
-            android:textSize="14dp"
+            android:textSize="@dimen/movie_item_year_text_size"
             android:gravity="right"
             android:maxLines="1"
             android:layout_width="match_parent"

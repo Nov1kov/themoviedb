@@ -1,6 +1,5 @@
-package ru.novikov.themoviedb.presenter;
+package ru.novikov.themoviedb.presenter.basepresenters;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import ru.novikov.themoviedb.App;
 import ru.novikov.themoviedb.model.DataProvider;
 import ru.novikov.themoviedb.model.DataProviderCallBacks;
-import ru.novikov.themoviedb.view.MoviesListView;
 
 /**
  * Created by Ivan on 08.10.2016.

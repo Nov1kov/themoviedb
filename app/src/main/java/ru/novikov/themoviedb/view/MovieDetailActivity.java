@@ -1,20 +1,34 @@
 package ru.novikov.themoviedb.view;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import ru.novikov.themoviedb.R;
-import ru.novikov.themoviedb.model.Entity.Movie;
-import ru.novikov.themoviedb.presenter.MovieDetailPresenter;
+import ru.novikov.themoviedb.model.entity.Genre;
+import ru.novikov.themoviedb.model.entity.Movie;
+import ru.novikov.themoviedb.model.entity.ProductionCountry;
+import ru.novikov.themoviedb.presenter.basepresenters.MovieDetailPresenter;
 import ru.novikov.themoviedb.presenter.MovieDetailPresenterImpl;
+import ru.novikov.themoviedb.view.baseviews.BaseActivity;
+import ru.novikov.themoviedb.view.baseviews.MovieDetailView;
 
-public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> implements MovieDetailView{
+public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> implements MovieDetailView {
 
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
+
+    private View mHomePageButton;
+    private TextView mCountriesTextView;
+    private TextView mRatingTextView;
+    private TextView mTitleTextView;
+    private TextView mTaglineTextView;
+    private TextView mOverviewTextView;
+    private TextView mGenresTextView;
+    private View mGenresTitle;
+    private View mCountriesTitle;
 
     @Override
     protected MovieDetailPresenterImpl createInstancePresenter() {
@@ -27,19 +41,31 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
         setContentView(R.layout.activity_movie_detail);
 
         int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
-
+/*
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mTitleTextView = (TextView) findViewById(R.id.title);
+        mRatingTextView = (TextView) findViewById(R.id.rating);
+        mTaglineTextView = (TextView) findViewById(R.id.tagline);
+        mOverviewTextView = (TextView) findViewById(R.id.overview);
+        mGenresTextView = (TextView) findViewById(R.id.genres);
+        mGenresTitle = findViewById(R.id.genres_title);
+        mCountriesTextView = (TextView) findViewById(R.id.countries);
+        mCountriesTitle = findViewById(R.id.countries_title);
+        mHomePageButton = findViewById(R.id.homepage);
+        mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                if (mPresenter.getCurrentMovie() != null) {
+                    String url = mPresenter.getCurrentMovie().homepage;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPresenter.loadMovie(movieId);
     }
@@ -47,6 +73,40 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     @Override
     public void updateInfo(Movie movie) {
 
+        mTitleTextView.setText(movie.title);
+        mRatingTextView.setText(String.format("%.1f", movie.voteAverage));
+        mTaglineTextView.setText(movie.tagline);
+        mOverviewTextView.setText(movie.overview);
+
+        if (movie.genres != null && movie.genres.size() > 0) {
+            mGenresTitle.setVisibility(View.VISIBLE);
+            mGenresTextView.setVisibility(View.VISIBLE);
+            String genresNames = "";
+            for (Genre genre : movie.genres) {
+                genresNames += genre.name + "\n";
+            }
+            mGenresTextView.setText(genresNames);
+        } else {
+            mGenresTitle.setVisibility(View.GONE);
+            mGenresTextView.setVisibility(View.GONE);
+        }
+
+        if (movie.productionCountries != null && movie.productionCountries.size() > 0) {
+            mCountriesTextView.setVisibility(View.VISIBLE);
+            mCountriesTitle.setVisibility(View.VISIBLE);
+            String countriesNames = "";
+            for (ProductionCountry country : movie.productionCountries) {
+                countriesNames += country.name + "\n";
+            }
+            mCountriesTextView.setText(countriesNames);
+        } else {
+            mCountriesTextView.setVisibility(View.GONE);
+            mCountriesTitle.setVisibility(View.GONE);
+        }
+
+        mHomePageButton.setVisibility(TextUtils.isEmpty(movie.homepage) ?
+                        View.GONE :
+                        View.VISIBLE);
     }
 
     @Override

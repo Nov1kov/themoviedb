@@ -1,4 +1,4 @@
-package ru.novikov.themoviedb.model.Entity;
+package ru.novikov.themoviedb.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;

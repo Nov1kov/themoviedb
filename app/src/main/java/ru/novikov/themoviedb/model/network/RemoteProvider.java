@@ -1,10 +1,13 @@
-package ru.novikov.themoviedb.model;
+package ru.novikov.themoviedb.model.network;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Pair;
 
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.Random;
 
 /**
@@ -15,7 +18,8 @@ public class RemoteProvider {
     public static final String API_KEY = "72b56103e43843412a992a8d64bf96e9";
 
     public static final String SERVICE_URL = "https://api.themoviedb.org/";
-    public static final String IMAGES_URL = "https://image.tmdb.org/t/p/w500/";
+    public static final String IMAGES_URL = "https://image.tmdb.org/";
+    public static final String IMAGE_PARAMS_QUERY = "t/p/w500";
     public static final String REST_VERSION = "3/";
 
     public static final String REST_MOVIE_KEY = "movie/";
@@ -28,6 +32,7 @@ public class RemoteProvider {
 
     private static final int TYPE_REQUEST_GET_POPULAR_MOVIES = 0;
     private static final int TYPE_REQUEST_GET_MOVIE_DETAIL = 1;
+    private static final int TYPE_REQUEST_GET_IMAGE = 2;
     private final ResponseAdapter mResponseAdapter;
 
     private Handler mHandler;
@@ -55,6 +60,9 @@ public class RemoteProvider {
                     case TYPE_REQUEST_GET_MOVIE_DETAIL:
                         mRemoteProviderListener.responseMovieDetail(msg.obj);
                         break;
+                    case TYPE_REQUEST_GET_IMAGE:
+                        mRemoteProviderListener.responseImage(msg.obj, msg.arg2);
+                        break;
                 }
             }
         };
@@ -66,25 +74,55 @@ public class RemoteProvider {
     }
 
     //https://api.themoviedb.org/3/movie/popular?api_key=72b56103e43843412a992a8d64bf96e9&language=en-US&page=1
-    public void getPopularMovies(String pageId) {
-        runThread(SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + REST_MOVIE_POPULAR_KEY +
+    public int getPopularMovies(String pageId) {
+        return runThread(SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + REST_MOVIE_POPULAR_KEY +
                 REST_API_KEY + API_KEY + REST_LANGUAGE_QUERY + mLanguage +
                 REST_PAGE_QUERY + pageId,
-                TYPE_REQUEST_GET_POPULAR_MOVIES,
-                generateRequestId());
+                TYPE_REQUEST_GET_POPULAR_MOVIES);
     }
 
-    public void getMovie(String movieId) {
-        runThread(SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + movieId + REST_API_KEY + API_KEY,
-                TYPE_REQUEST_GET_MOVIE_DETAIL,
-                generateRequestId());
+    public int getMovie(String movieId) {
+        return runThread(SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + movieId + REST_API_KEY + API_KEY,
+                TYPE_REQUEST_GET_MOVIE_DETAIL);
     }
 
-    private void runThread(final String requestUrl, final int requestType, final int requestId) {
+    public int loadImage(String imageUrl, int reqWidth, int reqHeight) {
+        return runThreadLoadBitmap(IMAGES_URL + IMAGE_PARAMS_QUERY + imageUrl,
+                imageUrl,
+                TYPE_REQUEST_GET_IMAGE, reqWidth, reqHeight);
+    }
+
+
+    private int runThreadLoadBitmap(final String requestUrl, final String imageUrl, final int requestType,
+                                     final int reqWidth, final int reqHeight) {
+        final int requestId = generateRequestId();
         Runnable runnable = new Runnable() {
             public void run() {
                 Message msg = mHandler.obtainMessage();
-                JSONObject jsonObject = HttpClient.requestWebService(requestUrl);
+
+                if (requestType == TYPE_REQUEST_GET_IMAGE) {
+
+                    //Bitmap bitmap = mHttpClient.downloadBitmap(requestUrl);
+                    //msg.obj = bitmap;
+                    msg.obj = new Pair<>(imageUrl, mHttpClient.downloadBitmap(requestUrl, reqWidth, reqHeight));
+                    msg.arg1 = requestType;
+                    msg.arg2 = requestId;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+        return requestId;
+    }
+
+    private int runThread(final String requestUrl, final int requestType) {
+        final int requestId = generateRequestId();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                Message msg = mHandler.obtainMessage();
+                JSONObject jsonObject = mHttpClient.requestWebService(requestUrl);
                 if (jsonObject != null) {
                     switch (requestType) {
                         case TYPE_REQUEST_GET_MOVIE_DETAIL:
@@ -102,6 +140,7 @@ public class RemoteProvider {
         };
         Thread thread = new Thread(runnable);
         thread.start();
+        return requestId;
     }
 
 }
