@@ -7,12 +7,13 @@ import android.support.v4.app.Fragment;
 import ru.novikov.themoviedb.App;
 import ru.novikov.themoviedb.model.DataProvider;
 import ru.novikov.themoviedb.model.DataProviderCallBacks;
+import ru.novikov.themoviedb.view.baseviews.View;
 
 /**
  * Created by Ivan on 08.10.2016.
  */
 
-public abstract class PresenterFragment<T> extends Fragment implements DataProviderCallBacks {
+public abstract class PresenterFragment<T extends View> extends Fragment implements DataProviderCallBacks, Presenter {
 
     protected T view;
 
@@ -37,5 +38,10 @@ public abstract class PresenterFragment<T> extends Fragment implements DataProvi
 
     protected DataProvider getDataProvider() {
         return App.getInstance().getDataProvider();
+    }
+
+    @Override
+    public void responseError(String errorMessage) {
+        view.showError(errorMessage);
     }
 }

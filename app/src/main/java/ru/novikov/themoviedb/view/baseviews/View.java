@@ -6,7 +6,9 @@ package ru.novikov.themoviedb.view.baseviews;
 
 public interface View {
 
+    /* progress bar */
     void showLoading(boolean shown);
+    /* error messages */
     void showError(String msg);
 
 }

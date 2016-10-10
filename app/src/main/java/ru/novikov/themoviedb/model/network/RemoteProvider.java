@@ -1,19 +1,19 @@
 package ru.novikov.themoviedb.model.network;
 
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Pair;
 
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.Random;
 
 /**
  * send request -> get responses -> convert json to object
  */
 public class RemoteProvider {
+
+    public static final String RELEASE_DATE_FORMAT = "yyyy-MM-dd";
 
     public static final String API_KEY = "72b56103e43843412a992a8d64bf96e9";
 
@@ -53,6 +53,11 @@ public class RemoteProvider {
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                // for images not show dialog with error
+                if (msg.arg1 != TYPE_REQUEST_GET_IMAGE && msg.obj == null) {
+                    mRemoteProviderListener.responseError();
+                    return;
+                }
                 switch (msg.arg1) {
                     case TYPE_REQUEST_GET_POPULAR_MOVIES:
                         mRemoteProviderListener.responsePopularMovies(msg.obj);
@@ -68,33 +73,28 @@ public class RemoteProvider {
         };
     }
 
-    private int generateRequestId() {
-        Random r = new Random();
-        return r.nextInt(Integer.MAX_VALUE);
-    }
-
     //https://api.themoviedb.org/3/movie/popular?api_key=72b56103e43843412a992a8d64bf96e9&language=en-US&page=1
     public int getPopularMovies(String pageId) {
-        return runThread(SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + REST_MOVIE_POPULAR_KEY +
+        return sendRequest(SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + REST_MOVIE_POPULAR_KEY +
                 REST_API_KEY + API_KEY + REST_LANGUAGE_QUERY + mLanguage +
                 REST_PAGE_QUERY + pageId,
                 TYPE_REQUEST_GET_POPULAR_MOVIES);
     }
 
     public int getMovie(String movieId) {
-        return runThread(SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + movieId + REST_API_KEY + API_KEY,
+        return sendRequest(SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + movieId + REST_API_KEY + API_KEY,
                 TYPE_REQUEST_GET_MOVIE_DETAIL);
     }
 
-    public int loadImage(String imageUrl, int reqWidth, int reqHeight) {
-        return runThreadLoadBitmap(IMAGES_URL + IMAGE_PARAMS_QUERY + imageUrl,
+    public int getImage(String imageUrl, int reqWidth, int reqHeight) {
+        return sendImageRequest(IMAGES_URL + IMAGE_PARAMS_QUERY + imageUrl,
                 imageUrl,
                 TYPE_REQUEST_GET_IMAGE, reqWidth, reqHeight);
     }
 
 
-    private int runThreadLoadBitmap(final String requestUrl, final String imageUrl, final int requestType,
-                                     final int reqWidth, final int reqHeight) {
+    private int sendImageRequest(final String requestUrl, final String imageUrl, final int requestType,
+                                 final int reqWidth, final int reqHeight) {
         final int requestId = generateRequestId();
         Runnable runnable = new Runnable() {
             public void run() {
@@ -102,9 +102,9 @@ public class RemoteProvider {
 
                 if (requestType == TYPE_REQUEST_GET_IMAGE) {
 
-                    //Bitmap bitmap = mHttpClient.downloadBitmap(requestUrl);
+                    //Bitmap bitmap = mHttpClient.downloadAndResizeBitmap(requestUrl);
                     //msg.obj = bitmap;
-                    msg.obj = new Pair<>(imageUrl, mHttpClient.downloadBitmap(requestUrl, reqWidth, reqHeight));
+                    msg.obj = new Pair<>(imageUrl, mHttpClient.downloadAndResizeBitmap(requestUrl, reqWidth, reqHeight));
                     msg.arg1 = requestType;
                     msg.arg2 = requestId;
                     mHandler.sendMessage(msg);
@@ -117,7 +117,7 @@ public class RemoteProvider {
         return requestId;
     }
 
-    private int runThread(final String requestUrl, final int requestType) {
+    private int sendRequest(final String requestUrl, final int requestType) {
         final int requestId = generateRequestId();
         Runnable runnable = new Runnable() {
             public void run() {
@@ -143,4 +143,8 @@ public class RemoteProvider {
         return requestId;
     }
 
+    private int generateRequestId() {
+        Random r = new Random();
+        return r.nextInt(Integer.MAX_VALUE);
+    }
 }

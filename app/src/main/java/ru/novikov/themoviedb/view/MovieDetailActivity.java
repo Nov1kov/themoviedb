@@ -1,10 +1,13 @@
 package ru.novikov.themoviedb.view;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.novikov.themoviedb.R;
@@ -29,6 +32,8 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     private TextView mGenresTextView;
     private View mGenresTitle;
     private View mCountriesTitle;
+    private ImageView mBackdrop;
+    private int mBackdropHeight;
 
     @Override
     protected MovieDetailPresenterImpl createInstancePresenter() {
@@ -39,13 +44,17 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+        setTitle(null);
 
         int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
-/*
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_close);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mBackdrop = (ImageView) findViewById(R.id.backdrop);
         mTitleTextView = (TextView) findViewById(R.id.title);
         mRatingTextView = (TextView) findViewById(R.id.rating);
         mTaglineTextView = (TextView) findViewById(R.id.tagline);
@@ -67,6 +76,7 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
             }
         });
 
+        mBackdropHeight = getResources().getDimensionPixelSize(R.dimen.movie_detail_backdrop_height);
         mPresenter.loadMovie(movieId);
     }
 
@@ -107,6 +117,13 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
         mHomePageButton.setVisibility(TextUtils.isEmpty(movie.homepage) ?
                         View.GONE :
                         View.VISIBLE);
+
+        mPresenter.loadBackdrop(movie.posterPath, mBackdrop.getWidth(), mBackdropHeight);
+    }
+
+    @Override
+    public void updateBackdrop(Bitmap bitmap) {
+        mBackdrop.setImageBitmap(bitmap);
     }
 
     @Override
@@ -115,7 +132,8 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     }
 
     @Override
-    public void showError(String msg) {
-
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachListener();
     }
 }

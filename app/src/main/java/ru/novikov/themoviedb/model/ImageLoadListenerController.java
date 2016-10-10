@@ -7,8 +7,8 @@ import java.util.Map;
 
 /**
  * Created by Ivan on 10.10.2016.
+ * Contain list with implements callbacks for Image load
  */
-
 public class ImageLoadListenerController {
 
     private final HashMap<BitmapListener, Integer> mMapListeners;
@@ -40,6 +40,10 @@ public class ImageLoadListenerController {
 
     public void clear() {
         mMapListeners.clear();
+    }
+
+    public void remove(BitmapListener bitmapListener) {
+        mMapListeners.remove(bitmapListener);
     }
 
 }

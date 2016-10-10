@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import ru.novikov.themoviedb.App;
 import ru.novikov.themoviedb.R;
 import ru.novikov.themoviedb.model.entity.Movie;
 
@@ -30,6 +29,12 @@ public class PopulateMoviesListAdapter extends RecyclerView.Adapter<MovieViewHol
     public void updateList(List<Movie> movieList){
         mPopulateMovies = movieList;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(MovieViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.detach();
     }
 
     @Override

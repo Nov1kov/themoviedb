@@ -10,5 +10,6 @@ public interface MovieDetailPresenter extends Presenter {
 
     void loadMovie(int movieId);
     Movie getCurrentMovie();
-
+    void detachListener();
+    void loadBackdrop(String imageUrl, int width, int height);
 }

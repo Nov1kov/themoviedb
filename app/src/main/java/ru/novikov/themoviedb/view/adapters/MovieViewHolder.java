@@ -6,10 +6,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import ru.novikov.themoviedb.App;
 import ru.novikov.themoviedb.R;
 import ru.novikov.themoviedb.model.ImageLoadListenerController;
 import ru.novikov.themoviedb.model.entity.Movie;
+
+import static ru.novikov.themoviedb.model.network.RemoteProvider.RELEASE_DATE_FORMAT;
 
 /**
  * Created by Ivan on 09.10.2016.
@@ -43,7 +49,19 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements ImageLoa
     public void bind(Movie movie) {
         mMovieEntity = movie;
         mTitle.setText(movie.title);
-        mYear.setText(movie.releaseDate);
+        SimpleDateFormat format = new SimpleDateFormat(RELEASE_DATE_FORMAT);
+        Date releaseDate = null;
+        Calendar cal = Calendar.getInstance();
+        try {
+            releaseDate = format.parse(movie.releaseDate);
+            cal.setTime(releaseDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (releaseDate != null) {
+            mYear.setText(Integer.toString(cal.get(Calendar.YEAR)));
+        }
+
         mOverview.setText(movie.overview);
         mRating.setText(String.format("%.1f", movie.voteAverage));
         mBackDrop.setImageBitmap(null);
@@ -66,5 +84,9 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements ImageLoa
     @Override
     public void onResponseBitmap(Bitmap bitmap) {
         mBackDrop.setImageBitmap(bitmap);
+    }
+
+    public void detach() {
+        App.getInstance().getDataProvider().removeImageListener(this);
     }
 }

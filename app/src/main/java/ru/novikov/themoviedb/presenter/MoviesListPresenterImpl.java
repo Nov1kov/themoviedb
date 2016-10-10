@@ -35,22 +35,12 @@ public class MoviesListPresenterImpl extends PresenterFragment<MoviesListView> i
     }
 
     @Override
-    public void onCreate() {
-
-    }
-
-    @Override
     public void responsePopularMovies(List<Movie> movies) {
         view.updateList(movies);
     }
 
     @Override
     public void responseMovieDetail(Movie movie) {
-
-    }
-
-    @Override
-    public void responseError(String errorMessage) {
 
     }
 }

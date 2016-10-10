@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-<!--    <android.support.v7.widget.Toolbar
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />-->
+        android:background="?attr/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -18,86 +19,106 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
             <ImageView
-                android:scaleType="centerCrop"
                 android:id="@+id/backdrop"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="@dimen/movie_detail_backdrop_height"
+                android:scaleType="centerCrop" />
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/movie_detail_content_padding">
 
-                <TextView
-                    android:id="@+id/title"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/movie_detail_text_margin_bottom">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/movie_detail_title_text_size"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/rating"
+                        android:layout_width="@dimen/movie_detail_rating_circle_size"
+                        android:layout_height="@dimen/movie_detail_rating_circle_size"
+                        android:layout_gravity="right"
+                        android:background="@drawable/rating_circle"
+                        android:gravity="center"
+                        android:textColor="@color/colorRating" />
+
+                </FrameLayout>
 
                 <TextView
-                    android:layout_gravity="right"
-                    android:id="@+id/rating"
+                    android:id="@+id/tagline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/movie_detail_text_margin_bottom"
+                    android:lineSpacingMultiplier="@dimen/text_line_spacing"
+                    android:textSize="@dimen/movie_detail_tagline_text_size" />
+
+                <TextView
+                    android:id="@+id/overview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/movie_detail_text_margin_bottom"
+                    android:lineSpacingMultiplier="@dimen/text_line_spacing"
+                    android:textSize="@dimen/movie_detail_overview_text_size" />
+
+                <TextView
+                    android:id="@+id/genres_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/genres_title"
+                    android:textSize="@dimen/movie_detail_genres_title_text_size"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/genres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="@dimen/text_line_spacing"
+                    android:textSize="@dimen/movie_detail_genres_text_size"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/countries_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/countries"
+                    android:textSize="@dimen/movie_detail_countries_title_text_size"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/countries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="@dimen/text_line_spacing"
+                    android:textSize="@dimen/movie_detail_countries_text_size"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/homepage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/movie_detail_homepage_height"
+                    android:background="@color/colorAccent"
+                    android:text="@string/go_to_homepage"
+                    android:textAllCaps="false"
                     android:textColor="@color/colorRating"
-                    android:gravity="center"
-                    android:background="@drawable/rating_circle"
-                    android:layout_width="@dimen/movie_detail_rating_circle_size"
-                    android:layout_height="@dimen/movie_detail_rating_circle_size" />
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/tagline"
-                android:textSize="@dimen/movie_detail_tagline_text_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/overview"
-                android:textSize="@dimen/movie_detail_overview_text_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/genres_title"
-                android:textSize="@dimen/movie_detail_genres_title_text_size"
-                android:visibility="gone"
-                android:text="@string/genres_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/genres"
-                android:textSize="@dimen/movie_detail_genres_text_size"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/countries_title"
-                android:text="@string/countries"
-                android:textSize="@dimen/movie_detail_countries_title_text_size"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/countries"
-                android:textSize="@dimen/movie_detail_countries_text_size"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <Button
-                android:id="@+id/homepage"
-                android:text="@string/go_to_homepage"
-                android:textAllCaps="false"
-                android:visibility="gone"
-                android:textColor="@color/colorRating"
-                android:background="@color/colorAccent"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/movie_detail_homepage_height" />
+                    android:visibility="gone" />
+            </LinearLayout>
 
         </LinearLayout>
 

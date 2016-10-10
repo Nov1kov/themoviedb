@@ -9,7 +9,9 @@ import java.util.Map.Entry;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-
+/***
+ * Cache in memory all images in app
+ */
 public class ImagesCache {
 
     private static final String TAG = "MemoryCache";

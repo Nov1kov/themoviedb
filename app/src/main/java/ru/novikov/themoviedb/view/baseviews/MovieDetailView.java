@@ -1,5 +1,7 @@
 package ru.novikov.themoviedb.view.baseviews;
 
+import android.graphics.Bitmap;
+
 import ru.novikov.themoviedb.model.entity.Movie;
 
 /**
@@ -9,5 +11,6 @@ import ru.novikov.themoviedb.model.entity.Movie;
 public interface MovieDetailView extends View {
 
     void updateInfo(Movie movie);
+    void updateBackdrop(Bitmap bitmap);
 
 }

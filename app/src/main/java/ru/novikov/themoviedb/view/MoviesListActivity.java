@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
-import ru.novikov.themoviedb.App;
 import ru.novikov.themoviedb.R;
 import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.presenter.basepresenters.MoviesListPresenter;
@@ -56,11 +55,6 @@ public class MoviesListActivity extends BaseActivity<MoviesListPresenter> implem
 
     @Override
     public void showLoading(boolean shown) {
-
-    }
-
-    @Override
-    public void showError(String msg) {
 
     }
 

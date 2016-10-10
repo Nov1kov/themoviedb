@@ -9,5 +9,6 @@ public interface RemoteProviderCallBack {
     void responseMovieDetail(Object obj);
     void responsePopularMovies(Object obj);
     void responseImage(Object obj, int requestId);
+    void responseError();
 
 }

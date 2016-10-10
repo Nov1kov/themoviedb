@@ -4,5 +4,7 @@
     <string name="go_to_homepage">Go to homepage</string>
     <string name="genres_title">Genres</string>
     <string name="countries">Countries</string>
+    <string name="error_connection_message">Check your internet connection, or come out of the house!</string>
+    <string name="error_connection_title">Network error</string>
 
 </resources>

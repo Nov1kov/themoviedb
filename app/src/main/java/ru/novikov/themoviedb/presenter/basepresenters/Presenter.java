@@ -6,7 +6,4 @@ package ru.novikov.themoviedb.presenter.basepresenters;
 
 public interface Presenter {
 
-    void onCreate();
-    void onStop();
-
 }

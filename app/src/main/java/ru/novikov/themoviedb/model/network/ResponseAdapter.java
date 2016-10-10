@@ -18,8 +18,8 @@ import ru.novikov.themoviedb.model.entity.ProductionCountry;
 
 /**
  * Created by Ivan on 08.10.2016.
+ * parse json to object and resize bitmap
  */
-
 public class ResponseAdapter {
 
 
@@ -33,6 +33,7 @@ public class ResponseAdapter {
         movie.tagline = jsonObject.optString("tagline");
         movie.overview = jsonObject.optString("overview");
         movie.voteAverage = jsonObject.optDouble("vote_average");
+        movie.posterPath = jsonObject.optString("poster_path");
 
         {
             JSONArray genres = jsonObject.optJSONArray("genres");
@@ -80,7 +81,7 @@ public class ResponseAdapter {
 
     public List<Movie> parseMoviesList(JSONObject jsonObject) {
 
-        List<Movie> foundItems = new ArrayList<Movie>();
+        List<Movie> foundItems = new ArrayList<>();
 
         JSONArray items = jsonObject.optJSONArray(RESULTS_KEY);
 
@@ -93,45 +94,6 @@ public class ResponseAdapter {
 
         return foundItems;
     }
-
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    public static Bitmap resizeBitmap(InputStream networkInputStream, int reqWidth, int reqHeight) {
-
-        final BufferedInputStream is = new BufferedInputStream(networkInputStream);
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        Bitmap bitmap = BitmapFactory.decodeStream(networkInputStream, null, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeStream(is, null, options);
-    }
-
 
     /**
      * Read the image from the stream and create a bitmap scaled to the desired
@@ -156,7 +118,7 @@ public class ResponseAdapter {
 
                 final int originalWidth = decodeBoundsOptions.outWidth;
                 final int originalHeight = decodeBoundsOptions.outHeight;
-                float ratio = 0;
+                float ratio;
                 if (minimumDesiredBitmapWith <= 0) {
                     ratio = (float) originalHeight / (float) minimumDesiredBitmapHeight;
                 } else if (minimumDesiredBitmapHeight <= 0) {
@@ -168,7 +130,6 @@ public class ResponseAdapter {
 
                 // inSampleSize prefers multiples of 2, but we prefer to prioritize memory savings
                 decodeBitmapOptions.inSampleSize = Math.max(1, Math.round(ratio));
-
             }
 
             return BitmapFactory.decodeStream(is, null, decodeBitmapOptions);

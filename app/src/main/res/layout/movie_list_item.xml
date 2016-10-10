@@ -27,12 +27,15 @@
     <LinearLayout
         android:layout_gravity="bottom"
         android:orientation="vertical"
+        android:padding="@dimen/movie_item_text_content_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/title"
+            android:textStyle="bold"
             android:textSize="@dimen/movie_item_title_text_size"
+            android:layout_marginBottom="@dimen/movie_item_text_bottom_margin"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,11 +45,14 @@
             android:id="@+id/overview"
             android:maxLines="2"
             android:textSize="@dimen/movie_item_overview_text_size"
+            android:lineSpacingMultiplier="@dimen/text_line_spacing"
+            android:layout_marginBottom="@dimen/movie_item_text_bottom_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         
         <TextView
             android:id="@+id/year"
+            android:textStyle="bold"
             android:textSize="@dimen/movie_item_year_text_size"
             android:gravity="right"
             android:maxLines="1"
