@@ -86,6 +86,11 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements ImageLoa
         mBackDrop.setImageBitmap(bitmap);
     }
 
+    @Override
+    public void onResponseError() {
+
+    }
+
     public void detach() {
         App.getInstance().getDataProvider().removeImageListener(this);
     }

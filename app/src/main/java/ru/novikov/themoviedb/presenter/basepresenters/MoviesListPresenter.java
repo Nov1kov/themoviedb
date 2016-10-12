@@ -8,4 +8,5 @@ public interface MoviesListPresenter extends Presenter {
 
     void loadList();
     void clearListeners();
+    void loadMore();
 }

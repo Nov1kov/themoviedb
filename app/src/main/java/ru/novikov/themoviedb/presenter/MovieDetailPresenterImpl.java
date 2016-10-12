@@ -30,7 +30,11 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
 
     @Override
     public void loadMovie(int movieId) {
-        getDataProvider().getMovie(movieId);
+        if (mCurrentMovie == null) {
+            getDataProvider().getMovie(movieId);
+        } else {
+            view.updateInfo(mCurrentMovie);
+        }
     }
 
     @Override
@@ -62,5 +66,10 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
     @Override
     public void onResponseBitmap(Bitmap bitmap) {
         view.updateBackdrop(bitmap);
+    }
+
+    @Override
+    public void onResponseError() {
+
     }
 }

@@ -35,6 +35,11 @@ public class MoviesListPresenterImpl extends PresenterFragment<MoviesListView> i
     }
 
     @Override
+    public void loadMore() {
+
+    }
+
+    @Override
     public void responsePopularMovies(List<Movie> movies) {
         view.updateList(movies);
     }

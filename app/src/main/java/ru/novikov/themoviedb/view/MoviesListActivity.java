@@ -14,11 +14,13 @@ import ru.novikov.themoviedb.presenter.MoviesListPresenterImpl;
 import ru.novikov.themoviedb.view.adapters.PopulateMoviesListAdapter;
 import ru.novikov.themoviedb.view.baseviews.BaseActivity;
 import ru.novikov.themoviedb.view.baseviews.MoviesListView;
+import ru.novikov.themoviedb.view.utils.UiTools;
 
 public class MoviesListActivity extends BaseActivity<MoviesListPresenter> implements MoviesListView, PopulateMoviesListAdapter.OnClickListListener {
 
     private RecyclerView mListView;
     private PopulateMoviesListAdapter mListAdapter;
+    private GridLayoutManager mGridLayoutManager;
 
     @Override
     protected MoviesListPresenterImpl createInstancePresenter() {
@@ -33,9 +35,30 @@ public class MoviesListActivity extends BaseActivity<MoviesListPresenter> implem
         mListAdapter = new PopulateMoviesListAdapter();
         mListAdapter.setListItemClickListener(this);
         mListView.setAdapter(mListAdapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        gridLayoutManager.setAutoMeasureEnabled(true);
-        mListView.setLayoutManager(gridLayoutManager);
+        mGridLayoutManager = new GridLayoutManager(this,
+                UiTools.getColumnCount(this, getResources().getDimensionPixelSize(R.dimen.movie_item_min_column_width)));
+        mGridLayoutManager.setAutoMeasureEnabled(true);
+        mGridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return (position == (mListAdapter.getProgressItemPosition())) ? mGridLayoutManager.getSpanCount() : 1;
+            }
+        });
+        mListView.setLayoutManager(mGridLayoutManager);
+        mListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int totalItemCount = mGridLayoutManager.getItemCount();
+                int lastVisibleItem = mGridLayoutManager.findLastVisibleItemPosition();
+
+                if (mListAdapter.needLoadedMore(totalItemCount, lastVisibleItem)){
+                    mPresenter.loadMore();
+                    mListAdapter.showProgressBar();
+                }
+            }
+        });
         mPresenter.loadList();
     }
 

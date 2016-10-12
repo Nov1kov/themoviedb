@@ -20,6 +20,7 @@ public class DataProvider implements RemoteProviderCallBack {
     private final ImagesCache mImagesCache;
     private final ImageLoadListenerController mImageListenerController;
     private RemoteProvider mRemoteProvider;
+    private MoviesCache moviesCache;
     private List<DataProviderCallBacks> mDataProviderCallBacksList;
 
     public DataProvider() {
@@ -73,10 +74,15 @@ public class DataProvider implements RemoteProviderCallBack {
             Pair pair = (Pair) obj;
             String imageUrl = (String) pair.first;
             Bitmap bitmap = (Bitmap) pair.second;
-            mImagesCache.put(imageUrl, bitmap);
             ImageLoadListenerController.BitmapListener bitmapListener = mImageListenerController.getListener(requestId);
+            mImagesCache.put(imageUrl, bitmap);
             if (bitmapListener != null) {
-                bitmapListener.onResponseBitmap(bitmap);
+                if (bitmap != null) {
+                    bitmapListener.onResponseBitmap(bitmap);
+                } else {
+                    bitmapListener.onResponseError();
+                }
+                mImageListenerController.remove(bitmapListener);
             }
         }
     }

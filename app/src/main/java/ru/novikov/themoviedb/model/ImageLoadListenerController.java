@@ -15,6 +15,7 @@ public class ImageLoadListenerController {
 
     public interface BitmapListener {
         void onResponseBitmap(Bitmap bitmap);
+        void onResponseError();
     }
 
     public ImageLoadListenerController() {
