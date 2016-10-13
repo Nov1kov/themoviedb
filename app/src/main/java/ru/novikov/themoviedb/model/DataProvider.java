@@ -1,12 +1,15 @@
 package ru.novikov.themoviedb.model;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.novikov.themoviedb.model.entity.Movie;
+import ru.novikov.themoviedb.model.memorycache.ImagesCache;
+import ru.novikov.themoviedb.model.memorycache.MoviesCache;
 import ru.novikov.themoviedb.model.network.RemoteProvider;
 import ru.novikov.themoviedb.model.network.RemoteProviderCallBack;
 
@@ -20,10 +23,11 @@ public class DataProvider implements RemoteProviderCallBack {
     private final ImagesCache mImagesCache;
     private final ImageLoadListenerController mImageListenerController;
     private RemoteProvider mRemoteProvider;
-    private MoviesCache moviesCache;
+    private MoviesCache mMoviesCache;
     private List<DataProviderCallBacks> mDataProviderCallBacksList;
 
-    public DataProvider() {
+    public DataProvider(){
+        mMoviesCache = new MoviesCache(RemoteProvider.MOVIES_PAGE_SIZE);
         mRemoteProvider = new RemoteProvider(this);
         mDataProviderCallBacksList = new ArrayList<>();
         mImagesCache = new ImagesCache();
@@ -43,7 +47,12 @@ public class DataProvider implements RemoteProviderCallBack {
     }
 
     public void getPopularMovies(int pageId) {
-        mRemoteProvider.getPopularMovies(Integer.toString(pageId));
+        List<Movie> movieList = mMoviesCache.getMoviesList(pageId);
+        if (movieList.size() == RemoteProvider.MOVIES_PAGE_SIZE) {
+            responsePopularMovies(movieList, pageId);
+        } else {
+            mRemoteProvider.getPopularMovies(Integer.toString(pageId));
+        }
     }
 
     public void getImage(String imageUrl, int reqWidth, int reqHeight,
@@ -69,21 +78,16 @@ public class DataProvider implements RemoteProviderCallBack {
     }
 
     @Override
-    public void responseImage(Object obj, int requestId) {
-        if (obj instanceof Pair) {
-            Pair pair = (Pair) obj;
-            String imageUrl = (String) pair.first;
-            Bitmap bitmap = (Bitmap) pair.second;
-            ImageLoadListenerController.BitmapListener bitmapListener = mImageListenerController.getListener(requestId);
-            mImagesCache.put(imageUrl, bitmap);
-            if (bitmapListener != null) {
-                if (bitmap != null) {
-                    bitmapListener.onResponseBitmap(bitmap);
-                } else {
-                    bitmapListener.onResponseError();
-                }
-                mImageListenerController.remove(bitmapListener);
+    public void responseImage(Bitmap bitmap, String imageUrl, int requestId) {
+        ImageLoadListenerController.BitmapListener bitmapListener = mImageListenerController.getListener(requestId);
+        mImagesCache.put(imageUrl, bitmap);
+        if (bitmapListener != null) {
+            if (bitmap != null) {
+                bitmapListener.onResponseBitmap(bitmap);
+            } else {
+                bitmapListener.onResponseError();
             }
+            mImageListenerController.remove(bitmapListener);
         }
     }
 
@@ -95,19 +99,19 @@ public class DataProvider implements RemoteProviderCallBack {
     }
 
     @Override
-    public void responseMovieDetail(Object obj) {
-        Movie movie = (Movie) obj;
+    public void responseMovieDetail(@NonNull Movie movie) {
         for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
             subscriber.responseMovieDetail(movie);
         }
+        mMoviesCache.putDetailMovie(movie);
     }
 
     @Override
-    public void responsePopularMovies(Object obj) {
-        List movieList = (List) obj;
+    public void responsePopularMovies(@NonNull List<Movie> movieList, int pageId) {
         for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
             subscriber.responsePopularMovies(movieList);
         }
+        mMoviesCache.putMoviesList(movieList, pageId);
     }
 
 

@@ -22,7 +22,6 @@ public class ThreadManager {
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>()
         );
-
     }
 
     public void addRunnable(Runnable runnable) {

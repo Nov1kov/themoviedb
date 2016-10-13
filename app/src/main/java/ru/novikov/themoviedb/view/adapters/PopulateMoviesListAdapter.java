@@ -46,6 +46,7 @@ public class PopulateMoviesListAdapter extends RecyclerView.Adapter {
         int oldPos = mPopulateMovies.size() - 1;
         mPopulateMovies.addAll(movieList);
         notifyItemRangeInserted(oldPos, movieList.size());
+        setLoaded();
         //notifyDataSetChanged();
     }
 

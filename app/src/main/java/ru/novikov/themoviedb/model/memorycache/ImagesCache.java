@@ -1,4 +1,4 @@
-package ru.novikov.themoviedb.model;
+package ru.novikov.themoviedb.model.memorycache;
 
 import java.util.Collections;
 import java.util.Iterator;
