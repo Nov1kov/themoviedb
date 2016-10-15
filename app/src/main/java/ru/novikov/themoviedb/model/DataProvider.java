@@ -23,11 +23,9 @@ public class DataProvider implements RemoteProviderCallBack {
     private final ImagesCache mImagesCache;
     private final ImageLoadListenerController mImageListenerController;
     private RemoteProvider mRemoteProvider;
-    private MoviesCache mMoviesCache;
     private List<DataProviderCallBacks> mDataProviderCallBacksList;
 
     public DataProvider(){
-        mMoviesCache = new MoviesCache(RemoteProvider.MOVIES_PAGE_SIZE);
         mRemoteProvider = new RemoteProvider(this);
         mDataProviderCallBacksList = new ArrayList<>();
         mImagesCache = new ImagesCache();
@@ -47,12 +45,7 @@ public class DataProvider implements RemoteProviderCallBack {
     }
 
     public void getPopularMovies(int pageId) {
-        List<Movie> movieList = mMoviesCache.getMoviesList(pageId);
-        if (movieList.size() == RemoteProvider.MOVIES_PAGE_SIZE) {
-            responsePopularMovies(movieList, pageId);
-        } else {
-            mRemoteProvider.getPopularMovies(Integer.toString(pageId));
-        }
+        mRemoteProvider.getPopularMovies(Integer.toString(pageId));
     }
 
     public void getImage(String imageUrl, int reqWidth, int reqHeight,
@@ -103,7 +96,7 @@ public class DataProvider implements RemoteProviderCallBack {
         for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
             subscriber.responseMovieDetail(movie);
         }
-        mMoviesCache.putDetailMovie(movie);
+
     }
 
     @Override
@@ -111,8 +104,5 @@ public class DataProvider implements RemoteProviderCallBack {
         for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
             subscriber.responsePopularMovies(movieList);
         }
-        mMoviesCache.putMoviesList(movieList, pageId);
     }
-
-
 }

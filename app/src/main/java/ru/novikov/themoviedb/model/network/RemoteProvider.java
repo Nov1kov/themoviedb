@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 import ru.novikov.themoviedb.model.entity.Movie;
+import ru.novikov.themoviedb.model.memorycache.MoviesCache;
 import ru.novikov.themoviedb.model.network.tasks.GetDetailMovieTask;
 import ru.novikov.themoviedb.model.network.tasks.GetImageTask;
 import ru.novikov.themoviedb.model.network.tasks.GetPopularMoviesTask;
@@ -24,6 +25,7 @@ public class RemoteProvider {
 
     public static final String RELEASE_DATE_FORMAT = "yyyy-MM-dd";
     public static final int MOVIES_PAGE_SIZE = 20;
+    public static final int CACHED_REQUEST_ID = -1;
 
     private static RemoteProvider sInstance;
 
@@ -31,13 +33,13 @@ public class RemoteProvider {
 
     private ThreadManager mThreadManager;
     private RequestFactory mRequestFactory;
-
+    private MoviesCache mMoviesCache;
     private RemoteProviderCallBack mRemoteProviderListener;
 
     public RemoteProvider(RemoteProviderCallBack remoteProviderListener) {
-        mRemoteProviderListener = remoteProviderListener;
         sInstance = this;
-
+        mRemoteProviderListener = remoteProviderListener;
+        mMoviesCache = new MoviesCache(RemoteProvider.MOVIES_PAGE_SIZE);
         mRequestFactory = new RequestFactory();
         mThreadManager = new ThreadManager();
         HttpClient.getsInstance();
@@ -54,6 +56,8 @@ public class RemoteProvider {
                     case Task.TYPE_REQUEST_GET_POPULAR_MOVIES:
                         if (msg.obj instanceof GetPopularMoviesTask) {
                             GetPopularMoviesTask popularMoviesTask = (GetPopularMoviesTask) msg.obj;
+                            mMoviesCache.putMoviesList(popularMoviesTask.getMovieList(),
+                                    popularMoviesTask.getPageId());
                             mRemoteProviderListener.responsePopularMovies(popularMoviesTask.getMovieList(),
                                     popularMoviesTask.getPageId());
                         }
@@ -61,6 +65,7 @@ public class RemoteProvider {
                     case Task.TYPE_REQUEST_GET_MOVIE_DETAIL:
                         if (msg.obj instanceof GetDetailMovieTask) {
                             GetDetailMovieTask movieDetailTask = (GetDetailMovieTask) msg.obj;
+                            mMoviesCache.putDetailMovie(movieDetailTask.getMovie());
                             mRemoteProviderListener.responseMovieDetail(movieDetailTask.getMovie());
                         }
                         break;
@@ -91,15 +96,28 @@ public class RemoteProvider {
 
     //https://api.themoviedb.org/3/movie/popular?api_key=72b56103e43843412a992a8d64bf96e9&language=en-US&page=1
     public int getPopularMovies(String pageId) {
-        GetPopularMoviesTask getImageTask = mRequestFactory.createPopularMoviesTask(pageId);
-        mThreadManager.addRunnable(getImageTask.getRunnable());
-        return getImageTask.getRequestId();
+
+        List<Movie> movieList = mMoviesCache.getMoviesList(Integer.parseInt(pageId));
+        if (movieList.size() == RemoteProvider.MOVIES_PAGE_SIZE) {
+            mRemoteProviderListener.responsePopularMovies(movieList, Integer.parseInt(pageId));
+            return CACHED_REQUEST_ID;
+        } else {
+            GetPopularMoviesTask getImageTask = mRequestFactory.createPopularMoviesTask(pageId);
+            mThreadManager.addRunnable(getImageTask.getRunnable());
+            return getImageTask.getRequestId();
+        }
     }
 
     public int getMovie(String movieId) {
-        GetDetailMovieTask getImageTask = mRequestFactory.createDetailMovieTask(movieId);
-        mThreadManager.addRunnable(getImageTask.getRunnable());
-        return getImageTask.getRequestId();
+        Movie movie = mMoviesCache.getMovie(Integer.parseInt(movieId));
+        if (movie != null) {
+            mRemoteProviderListener.responseMovieDetail(movie);
+            return CACHED_REQUEST_ID;
+        } else {
+            GetDetailMovieTask getImageTask = mRequestFactory.createDetailMovieTask(movieId);
+            mThreadManager.addRunnable(getImageTask.getRunnable());
+            return getImageTask.getRequestId();
+        }
     }
 
     public int getImage(String imageUrl, int reqWidth, int reqHeight) {

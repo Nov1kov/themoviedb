@@ -50,9 +50,10 @@ public class MoviesCache {
         mCache.append(movie.id, movieWrapper);
     }
 
+    /* get only detailed movie */
     public Movie getMovie(int id) {
         MovieWrapper movieWrapper = mCache.get(id, null);
-        return movieWrapper != null ? movieWrapper.getMovie() : null;
+        return movieWrapper != null && movieWrapper.isDetail ? movieWrapper.getMovie() : null;
     }
 
     public List<Movie> getMoviesList(int pageId) {

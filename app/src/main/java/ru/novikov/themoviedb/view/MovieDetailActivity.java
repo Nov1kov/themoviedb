@@ -36,6 +36,7 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     private View mCountriesTitle;
     private ImageView mBackdrop;
     private int mBackdropHeight;
+    private int mMovieId;
 
     @Override
     protected MovieDetailPresenterImpl createInstancePresenter() {
@@ -48,7 +49,7 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
         setContentView(R.layout.activity_movie_detail);
         setTitle(null);
 
-        int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
+        mMovieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, -1);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_close);
@@ -79,7 +80,12 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
         });
 
         mBackdropHeight = getResources().getDimensionPixelSize(R.dimen.movie_detail_backdrop_height);
-        mPresenter.loadMovie(movieId);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPresenter.loadMovie(mMovieId);
     }
 
     @Override

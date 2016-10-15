@@ -39,7 +39,7 @@ public class GetPopularMoviesTask extends Task {
     }
 
     public int getPageId() {
-        return Integer.getInteger(mPageId, 0);
+        return Integer.parseInt(mPageId);
     }
 
     public List<Movie> getMovieList() {
