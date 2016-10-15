@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpRetryException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
@@ -23,6 +24,15 @@ public class HttpClient {
 
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final int DATARETRIEVAL_TIMEOUT = 30000;
+
+    private static HttpClient sInstance;
+
+    public static HttpClient getsInstance() {
+        if (sInstance == null) {
+            sInstance = new HttpClient();
+        }
+        return sInstance;
+    }
 
     public HttpClient() {
     }

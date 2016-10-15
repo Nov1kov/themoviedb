@@ -1,5 +1,12 @@
 package ru.novikov.themoviedb.model.network;
 
+import java.util.Random;
+
+import ru.novikov.themoviedb.model.network.tasks.GetDetailMovieTask;
+import ru.novikov.themoviedb.model.network.tasks.GetImageTask;
+import ru.novikov.themoviedb.model.network.tasks.GetPopularMoviesTask;
+import ru.novikov.themoviedb.model.network.tasks.Task;
+
 /**
  * Created by inovikov on 12.10.2016.
  */
@@ -27,17 +34,29 @@ public class RequestFactory {
         this.mLanguage = LANFUAGE_QUERY_EN;
     }
 
-    public String createUrlPopularMovies(String pageId) {
+    private String createUrlPopularMovies(String pageId) {
         return SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + REST_MOVIE_POPULAR_KEY +
                 REST_API_KEY + API_KEY + REST_LANGUAGE_QUERY + mLanguage +
                 REST_PAGE_QUERY + pageId;
     }
 
-    public String createUrlMovie(String movieId) {
+    private String createUrlDetailMovie(String movieId) {
         return SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + movieId + REST_API_KEY + API_KEY;
     }
 
-    public String createUrlImage(String imageUrl) {
+    private String createUrlImage(String imageUrl) {
         return IMAGES_URL + IMAGE_PARAMS_QUERY + imageUrl;
+    }
+
+    public GetImageTask createGetImageTask(String imageUrl, int reqWidth, int reqHeight) {
+        return new GetImageTask(createUrlImage(imageUrl), imageUrl, reqWidth, reqHeight);
+    }
+
+    public GetPopularMoviesTask createPopularMoviesTask(String pageId) {
+        return new GetPopularMoviesTask(createUrlPopularMovies(pageId), pageId);
+    }
+
+    public GetDetailMovieTask createDetailMovieTask(String movieId) {
+        return new GetDetailMovieTask(createUrlDetailMovie(movieId), movieId);
     }
 }

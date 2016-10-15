@@ -25,7 +25,7 @@ public class ResponseAdapter {
 
     private static final String RESULTS_KEY = "results";
 
-    public Movie parseMovieDetail(JSONObject jsonObject) {
+    public static Movie parseMovieDetail(JSONObject jsonObject) {
         Movie movie = new Movie();
         movie.id = jsonObject.optInt("id");
         movie.backdropPath = jsonObject.optString("backdrop_path");
@@ -65,21 +65,21 @@ public class ResponseAdapter {
         return movie;
     }
 
-    public ProductionCountry parseProductionCountrie(JSONObject jsonObject) {
+    public static ProductionCountry parseProductionCountrie(JSONObject jsonObject) {
         ProductionCountry productionCountry = new ProductionCountry();
         productionCountry.iso31661 = jsonObject.optString("iso_3166_1");
         productionCountry.name = jsonObject.optString("name");
         return productionCountry;
     }
 
-    public Genre parseGenre(JSONObject jsonObject) {
+    public static Genre parseGenre(JSONObject jsonObject) {
         Genre genre = new Genre();
         genre.id = jsonObject.optInt("id");
         genre.name = jsonObject.optString("name");
         return genre;
     }
 
-    public List<Movie> parseMoviesList(JSONObject jsonObject) {
+    public static List<Movie> parseMoviesList(JSONObject jsonObject) {
 
         List<Movie> foundItems = new ArrayList<>();
 
@@ -135,7 +135,7 @@ public class ResponseAdapter {
             return BitmapFactory.decodeStream(is, null, decodeBitmapOptions);
 
         } catch (IOException e) {
-            throw new RuntimeException(e); // this shouldn't happen
+            return null;
         } finally {
             try {
                 is.close();
