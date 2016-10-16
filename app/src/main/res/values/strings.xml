@@ -7,5 +7,7 @@
     <string name="error_connection_message">Check your internet connection, or come out of the house!</string>
     <string name="error_connection_title">Network error</string>
     <string name="search">Search</string>
+    <string name="transition_name_poster">moviePoster</string>
+    <string name="transition_name_rating">movieRating</string>
 
 </resources>

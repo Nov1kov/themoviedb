@@ -3,12 +3,20 @@ package ru.novikov.themoviedb.view;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.transition.Fade;
+import android.transition.Scene;
+import android.transition.TransitionManager;
+import android.transition.TransitionSet;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +45,7 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     private ImageView mBackdrop;
     private int mBackdropHeight;
     private int mMovieId;
+    private Scene scene2;
 
     @Override
     protected MovieDetailPresenterImpl createInstancePresenter() {
@@ -62,11 +71,25 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
         mRatingTextView = (TextView) findViewById(R.id.rating);
         mTaglineTextView = (TextView) findViewById(R.id.tagline);
         mOverviewTextView = (TextView) findViewById(R.id.overview);
-        mGenresTextView = (TextView) findViewById(R.id.genres);
-        mGenresTitle = findViewById(R.id.genres_title);
-        mCountriesTextView = (TextView) findViewById(R.id.countries);
-        mCountriesTitle = findViewById(R.id.countries_title);
-        mHomePageButton = findViewById(R.id.homepage);
+
+        ViewGroup sceneRoot = (ViewGroup) findViewById(R.id.root_scene);
+        View scene2View = getLayoutInflater().inflate(R.layout.detailed_movie_scene, sceneRoot, false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            scene2 = new Scene(sceneRoot, scene2View);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            scene2 = new Scene(sceneRoot, (ViewGroup) scene2View);
+        } else {
+            ViewGroup parent = (ViewGroup) sceneRoot.getParent();
+            int index = parent.indexOfChild(sceneRoot);
+            parent.removeView(sceneRoot);
+            parent.addView(scene2View, index);
+        }
+
+        mGenresTextView = (TextView) scene2View.findViewById(R.id.genres);
+        mGenresTitle = scene2View.findViewById(R.id.genres_title);
+        mCountriesTextView = (TextView) scene2View.findViewById(R.id.countries);
+        mCountriesTitle = scene2View.findViewById(R.id.countries_title);
+        mHomePageButton = scene2View.findViewById(R.id.homepage);
         mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +149,22 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
                         View.GONE :
                         View.VISIBLE);
 
-        mPresenter.loadBackdrop(movie.posterPath, mBackdrop.getWidth(), mBackdropHeight);
+        Animation logoMoveAnimation = AnimationUtils.loadAnimation(this, R.anim.scale);
+        mHomePageButton.startAnimation(logoMoveAnimation);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            TransitionSet set = new TransitionSet();
+            set.setOrdering(TransitionSet.ORDERING_SEQUENTIAL);
+            Fade fadeAnim = new Fade();
+            fadeAnim.addTarget(R.id.genres).addTarget(R.id.genres_title).
+                    addTarget(R.id.countries).addTarget(R.id.countries_title);
+            set.addTransition(fadeAnim);
+            set.setDuration(1000);
+            TransitionManager.go(scene2, set);
+        }
+
+        mPresenter.loadBackdrop(movie.backdropPath, mBackdrop.getWidth(), mBackdropHeight);
     }
 
     @Override
@@ -143,7 +181,7 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish(); //NavUtils.navigateUpFromSameTask(this);
+                ActivityCompat.finishAfterTransition(this); //finish(); //NavUtils.navigateUpFromSameTask(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

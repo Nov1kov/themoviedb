@@ -41,7 +41,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnClickListListener {
-        void onListClick(Movie movie);
+        void onListClick(Movie movie, View moviePoster, View ratingView);
     }
 
     public void updateList(List<Movie> movieList){
@@ -79,8 +79,8 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
             movieViewHolder.bind(movie);
             movieViewHolder.setListItemClickListener(new OnClickListListener() {
                 @Override
-                public void onListClick(Movie movie) {
-                    mListItemClickListener.onListClick(movie);
+                public void onListClick(Movie movie, View moviePoster, View ratingView) {
+                    mListItemClickListener.onListClick(movie, moviePoster, ratingView);
                 }
             });
         } /*else if (holder instanceof LoadingViewHolder) {

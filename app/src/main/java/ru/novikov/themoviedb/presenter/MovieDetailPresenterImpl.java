@@ -50,7 +50,7 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
 
     @Override
     public void loadBackdrop(String imageUrl, int width, int height) {
-        getDataProvider().getImage(imageUrl, width, height, this);
+        getDataProvider().getImage(imageUrl, width, height, this, true);
     }
 
     @Override

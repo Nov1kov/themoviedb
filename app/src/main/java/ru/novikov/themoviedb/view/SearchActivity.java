@@ -2,7 +2,6 @@ package ru.novikov.themoviedb.view;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -10,8 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.novikov.themoviedb.R;
-import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.presenter.MoviesListPresenterImpl;
+import ru.novikov.themoviedb.view.baseviews.BaseListActivity;
+import ru.novikov.themoviedb.view.utils.UiTools;
 
 public class SearchActivity extends BaseListActivity implements SearchView.OnQueryTextListener {
 
@@ -24,6 +24,7 @@ public class SearchActivity extends BaseListActivity implements SearchView.OnQue
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(null);
     }
 
 
@@ -55,6 +56,7 @@ public class SearchActivity extends BaseListActivity implements SearchView.OnQue
     public boolean onQueryTextSubmit(String query) {
         if (!TextUtils.isEmpty(query)) {
             mPresenter.loadSearchList(query);
+            UiTools.hideKeyBoard(this);
             return true;
         }
         return false;

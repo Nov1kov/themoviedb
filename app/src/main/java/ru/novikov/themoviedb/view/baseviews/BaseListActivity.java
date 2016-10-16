@@ -1,18 +1,22 @@
-package ru.novikov.themoviedb.view;
+package ru.novikov.themoviedb.view.baseviews;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Scene;
+import android.transition.TransitionManager;
 
 import java.util.List;
 
 import ru.novikov.themoviedb.R;
 import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.presenter.basepresenters.MoviesListPresenter;
-import ru.novikov.themoviedb.view.baseviews.BaseActivity;
+import ru.novikov.themoviedb.view.MovieDetailActivity;
 import ru.novikov.themoviedb.view.adapters.MoviesListAdapter;
-import ru.novikov.themoviedb.view.baseviews.MoviesListView;
 import ru.novikov.themoviedb.view.utils.UiTools;
 
 /**
@@ -52,7 +56,7 @@ abstract public class BaseListActivity extends BaseActivity<MoviesListPresenter>
                 int totalItemCount = mGridLayoutManager.getItemCount();
                 int lastVisibleItem = mGridLayoutManager.findLastVisibleItemPosition();
 
-                if (mListAdapter.needLoadedMore(totalItemCount, lastVisibleItem)){
+                if (mListAdapter.needLoadedMore(totalItemCount, lastVisibleItem)) {
                     mPresenter.loadMore();
                     mListAdapter.showProgressBar();
                 }
@@ -71,11 +75,16 @@ abstract public class BaseListActivity extends BaseActivity<MoviesListPresenter>
     }
 
     @Override
-    public void onListClick(Movie movie) {
+    public void onListClick(Movie movie, android.view.View moviePoster, android.view.View ratingView) {
         if (movie.id != null) {
             Intent intent = new Intent(this, MovieDetailActivity.class);
             intent.putExtra(MovieDetailActivity.EXTRA_MOVIE_ID, movie.id);
-            startActivity(intent);
+            Pair<android.view.View, String> p1 = Pair.create(moviePoster, mPosterTransitionName);
+            Pair<android.view.View, String> p2 = Pair.create(ratingView, mRatingTransitionName);
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(this, p1, p2);
+            ActivityCompat.startActivity(this, intent, options.toBundle());
+
         }
     }
 }

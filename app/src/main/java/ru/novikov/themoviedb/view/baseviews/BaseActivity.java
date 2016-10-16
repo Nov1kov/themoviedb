@@ -17,6 +17,8 @@ import ru.novikov.themoviedb.presenter.basepresenters.Presenter;
 public abstract class BaseActivity<T extends Presenter> extends AppCompatActivity implements View{
 
     public final static String FRAGMENT_PRESENTER_TAG = "fragment_presenter_tag";
+    public String mPosterTransitionName;
+    public String mRatingTransitionName;
 
     protected T mPresenter;
 
@@ -34,6 +36,8 @@ public abstract class BaseActivity<T extends Presenter> extends AppCompatActivit
             fragmentTransaction.add(fragment, FRAGMENT_PRESENTER_TAG).commit();
         }
 
+        mRatingTransitionName = getString(R.string.transition_name_rating);
+        mPosterTransitionName = getString(R.string.transition_name_poster);
     }
 
     @Override

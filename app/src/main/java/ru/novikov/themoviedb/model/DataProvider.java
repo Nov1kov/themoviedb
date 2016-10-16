@@ -25,7 +25,7 @@ public class DataProvider implements RemoteProviderCallBack {
     private RemoteProvider mRemoteProvider;
     private List<DataProviderCallBacks> mDataProviderCallBacksList;
 
-    public DataProvider(){
+    public DataProvider() {
         mRemoteProvider = new RemoteProvider(this);
         mDataProviderCallBacksList = new ArrayList<>();
         mImagesCache = new ImagesCache();
@@ -42,7 +42,7 @@ public class DataProvider implements RemoteProviderCallBack {
 
     private void sendResponseToSubscribers(@DataProviderCallBacks.TypeInfoDataProvider int typeInfo,
                                            Movie movie, List<Movie> movies, int pageId, String query) {
-        for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
+        for (DataProviderCallBacks subscriber : mDataProviderCallBacksList) {
             subscriber.responseSuccessful(typeInfo, movie, movies, pageId, query);
         }
     }
@@ -61,13 +61,23 @@ public class DataProvider implements RemoteProviderCallBack {
 
     public void getImage(String imageUrl, int reqWidth, int reqHeight,
                          ImageLoadListenerController.BitmapListener bitmapListener) {
+        getImage(imageUrl, reqWidth, reqHeight, bitmapListener, false);
+    }
+
+    public void getImage(String imageUrl, int reqWidth, int reqHeight,
+                         ImageLoadListenerController.BitmapListener bitmapListener, boolean forced) {
 
         Bitmap cachedBitmap = mImagesCache.get(imageUrl);
         if (cachedBitmap == null) {
             int requestId = mRemoteProvider.getImage(imageUrl, reqWidth, reqHeight);
             mImageListenerController.put(bitmapListener, requestId);
         } else {
-            mImageListenerController.put(bitmapListener, 0);
+            if (forced) {
+                int requestId = mRemoteProvider.getImage(imageUrl, reqWidth, reqHeight);
+                mImageListenerController.put(bitmapListener, requestId);
+            } else {
+                mImageListenerController.put(bitmapListener, RemoteProvider.CACHED_REQUEST_ID);
+            }
             bitmapListener.onResponseBitmap(cachedBitmap);
         }
 

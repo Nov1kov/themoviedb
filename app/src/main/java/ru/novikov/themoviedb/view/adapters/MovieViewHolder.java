@@ -74,7 +74,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements ImageLoa
             @Override
             public void onClick(View v) {
                 if (mMovieEntity != null) {
-                    mListItemClickListener.onListClick(mMovieEntity);
+                    mListItemClickListener.onListClick(mMovieEntity, mBackDrop, mRating);
                 }
             }
         });

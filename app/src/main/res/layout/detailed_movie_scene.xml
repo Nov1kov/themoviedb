@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_scene"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/genres_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/genres_title"
+        android:textSize="@dimen/movie_detail_genres_title_text_size"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/genres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingMultiplier="@dimen/text_line_spacing"
+        android:textSize="@dimen/movie_detail_genres_text_size"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/countries_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/countries"
+        android:textSize="@dimen/movie_detail_countries_title_text_size"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/countries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingMultiplier="@dimen/text_line_spacing"
+        android:textSize="@dimen/movie_detail_countries_text_size"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/homepage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/movie_detail_homepage_height"
+        android:background="@color/colorAccent"
+        android:maxWidth="@dimen/movie_detail_max_width_homepage"
+        android:text="@string/go_to_homepage"
+        android:textAllCaps="false"
+        android:textColor="@color/colorRating"
+        android:visibility="gone" />
+
+</LinearLayout>

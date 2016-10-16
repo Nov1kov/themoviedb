@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.List;
-
 import ru.novikov.themoviedb.R;
-import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.presenter.MoviesListPresenterImpl;
-import ru.novikov.themoviedb.view.baseviews.MoviesListView;
+import ru.novikov.themoviedb.view.baseviews.BaseListActivity;
 
 public class MoviesListActivity extends BaseListActivity {
 

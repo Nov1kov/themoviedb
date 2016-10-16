@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/backdrop"
+        android:transitionName="@string/transition_name_poster"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
         android:layout_height="@dimen/movie_item_backdrop_height" />
@@ -17,6 +18,7 @@
         android:background="@drawable/rating_circle"
         android:layout_margin="@dimen/movie_item_rating_margin"
         android:id="@+id/rating"
+        android:transitionName="@string/transition_name_rating"
         android:textSize="@dimen/movie_item_rating_text_size"
         android:textColor="@color/colorRating"
         android:layout_width="@dimen/movie_item_circle_size"
