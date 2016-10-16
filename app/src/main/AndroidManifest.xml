@@ -27,6 +27,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.novikov.themoviedb.view.MoviesListActivity" />
         </activity>
+        <activity android:name=".view.SearchActivity"></activity>
     </application>
 
 </manifest>

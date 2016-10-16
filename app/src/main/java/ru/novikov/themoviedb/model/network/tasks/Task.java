@@ -14,6 +14,7 @@ public abstract class Task {
     public static final int TYPE_REQUEST_GET_POPULAR_MOVIES = 0;
     public static final int TYPE_REQUEST_GET_MOVIE_DETAIL = 1;
     public static final int TYPE_REQUEST_GET_IMAGE = 2;
+    public static final int TYPE_REQUEST_GET_SEARCH_MOVIES = 3;
 
     public static final int TASK_COMPLETE = 0;
     public static final int TASK_ERROR = 1;

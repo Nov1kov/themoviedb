@@ -5,6 +5,7 @@ import android.util.SparseArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import ru.novikov.themoviedb.model.entity.Movie;
@@ -33,33 +34,32 @@ public class MoviesCache {
         }
     }
 
-    private SparseArray<MovieWrapper> mCache;
+    private LinkedHashMap<Integer, MovieWrapper> mCache;
 
     public MoviesCache(int capacity) {
-        mCache = new SparseArray<>(capacity);
+        mCache = new LinkedHashMap<>(capacity);
     }
 
     public void putDetailMovie(Movie movie) {
-        MovieWrapper movieWrapper = mCache.get(movie.id, null);
+        MovieWrapper movieWrapper = mCache.get(movie.id);
         if (movieWrapper == null) {
             movieWrapper = new MovieWrapper(movie);
         } else {
             movieWrapper.updateMovie(movie);
         }
         movieWrapper.isDetail = true;
-        mCache.append(movie.id, movieWrapper);
+        mCache.put(movie.id, movieWrapper);
     }
 
     /* get only detailed movie */
     public Movie getMovie(int id) {
-        MovieWrapper movieWrapper = mCache.get(id, null);
+        MovieWrapper movieWrapper = mCache.get(id);
         return movieWrapper != null && movieWrapper.isDetail ? movieWrapper.getMovie() : null;
     }
 
     public List<Movie> getMoviesList(int pageId) {
         List<Movie> movieList = new ArrayList<>();
-        for (int i = 0; i < mCache.size(); i++) {
-            MovieWrapper movieWrapper = mCache.valueAt(i);
+        for (MovieWrapper movieWrapper: mCache.values()) {
             if (movieWrapper.pageId == pageId) {
                 movieList.add(movieWrapper.getMovie());
             }
@@ -69,10 +69,10 @@ public class MoviesCache {
 
     public void putMoviesList(List<Movie> movieList, int pageId) {
         for (Movie movie: movieList) {
-            if (mCache.indexOfKey(movie.id) < 0) {
+            if (mCache.get(movie.id) == null) {
                 MovieWrapper movieWrapper = new MovieWrapper(movie);
                 movieWrapper.pageId = pageId;
-                mCache.append(movie.id, movieWrapper);
+                mCache.put(movie.id, movieWrapper);
             }
         }
     }

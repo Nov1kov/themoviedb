@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import java.util.List;
 
+import ru.novikov.themoviedb.model.DataProviderCallBacks;
 import ru.novikov.themoviedb.model.ImageLoadListenerController;
 import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.presenter.basepresenters.MovieDetailPresenter;
@@ -53,17 +54,6 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
     }
 
     @Override
-    public void responsePopularMovies(List<Movie> movies) {
-
-    }
-
-    @Override
-    public void responseMovieDetail(Movie movie) {
-        mCurrentMovie = movie;
-        view.updateInfo(movie);
-    }
-
-    @Override
     public void onResponseBitmap(Bitmap bitmap) {
         view.updateBackdrop(bitmap);
     }
@@ -71,5 +61,19 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
     @Override
     public void onResponseError() {
 
+    }
+
+    @Override
+    public void responseSuccessful(@DataProviderCallBacks.TypeInfoDataProvider int typeInfo,
+                                   Movie movie, List<Movie> movies, int pageId, String query) {
+        switch (typeInfo) {
+            case DataProviderCallBacks.TYPE_INFO_MOVIE_DETAIL:
+                mCurrentMovie = movie;
+                view.updateInfo(movie);
+                break;
+            case DataProviderCallBacks.TYPE_INFO_POPULAR_MOVIES:
+            case DataProviderCallBacks.TYPE_INFO_SEARCH_MOVIES:
+                break;
+        }
     }
 }

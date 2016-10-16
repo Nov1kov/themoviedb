@@ -40,12 +40,23 @@ public class DataProvider implements RemoteProviderCallBack {
         mDataProviderCallBacksList.remove(dataProviderCallBacks);
     }
 
+    private void sendResponseToSubscribers(@DataProviderCallBacks.TypeInfoDataProvider int typeInfo,
+                                           Movie movie, List<Movie> movies, int pageId, String query) {
+        for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
+            subscriber.responseSuccessful(typeInfo, movie, movies, pageId, query);
+        }
+    }
+
     public void getMovie(int movieId) {
         mRemoteProvider.getMovie(Integer.toString(movieId));
     }
 
     public void getPopularMovies(int pageId) {
-        mRemoteProvider.getPopularMovies(Integer.toString(pageId));
+        mRemoteProvider.getPopularMovies(pageId);
+    }
+
+    public void getSearchMovies(String query, int pageId) {
+        mRemoteProvider.getSearchMovies(query, pageId);
     }
 
     public void getImage(String imageUrl, int reqWidth, int reqHeight,
@@ -92,17 +103,21 @@ public class DataProvider implements RemoteProviderCallBack {
     }
 
     @Override
-    public void responseMovieDetail(@NonNull Movie movie) {
-        for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
-            subscriber.responseMovieDetail(movie);
-        }
+    public void responseSearchMovies(List<Movie> movieList, String searchQuery, int pageId) {
+        sendResponseToSubscribers(DataProviderCallBacks.TYPE_INFO_SEARCH_MOVIES,
+                null, movieList, pageId, searchQuery);
+    }
 
+    @Override
+    public void responseMovieDetail(@NonNull Movie movie) {
+        sendResponseToSubscribers(DataProviderCallBacks.TYPE_INFO_MOVIE_DETAIL,
+                movie, null, DataProviderCallBacks.UNDEFINED_PAGE_ID, null);
     }
 
     @Override
     public void responsePopularMovies(@NonNull List<Movie> movieList, int pageId) {
-        for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
-            subscriber.responsePopularMovies(movieList);
-        }
+        sendResponseToSubscribers(DataProviderCallBacks.TYPE_INFO_POPULAR_MOVIES,
+                null, movieList, pageId, null);
     }
+
 }

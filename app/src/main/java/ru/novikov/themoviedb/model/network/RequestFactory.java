@@ -1,11 +1,9 @@
 package ru.novikov.themoviedb.model.network;
 
-import java.util.Random;
-
-import ru.novikov.themoviedb.model.network.tasks.GetDetailMovieTask;
-import ru.novikov.themoviedb.model.network.tasks.GetImageTask;
-import ru.novikov.themoviedb.model.network.tasks.GetPopularMoviesTask;
-import ru.novikov.themoviedb.model.network.tasks.Task;
+import ru.novikov.themoviedb.model.network.tasks.DetailMovieTask;
+import ru.novikov.themoviedb.model.network.tasks.LoadImageTask;
+import ru.novikov.themoviedb.model.network.tasks.PopularMoviesTask;
+import ru.novikov.themoviedb.model.network.tasks.SearchTask;
 
 /**
  * Created by inovikov on 12.10.2016.
@@ -21,8 +19,11 @@ public class RequestFactory {
     private static final String REST_VERSION = "3/";
 
     private static final String REST_MOVIE_KEY = "movie/";
+    private static final String REST_SEARCH_KEY = "search/";
     private static final String REST_MOVIE_POPULAR_KEY = "popular";
+    private static final String REST_MOVIE_SEARCH_KEY = "movie";
     private static final String REST_PAGE_QUERY = "&page=";
+    private static final String REST_SEARCH_QUERY = "&query=";
     private static final String REST_LANGUAGE_QUERY = "&language=";
     private static final String REST_API_KEY = "?api_key=";
 
@@ -40,6 +41,13 @@ public class RequestFactory {
                 REST_PAGE_QUERY + pageId;
     }
 
+    private String createUrlSearchMovies(String query, String pageId) {
+        return SERVICE_URL + REST_VERSION + REST_SEARCH_KEY + REST_MOVIE_SEARCH_KEY +
+                REST_API_KEY + API_KEY + REST_LANGUAGE_QUERY + mLanguage +
+                REST_SEARCH_QUERY + query +
+                REST_PAGE_QUERY + pageId;
+    }
+
     private String createUrlDetailMovie(String movieId) {
         return SERVICE_URL + REST_VERSION + REST_MOVIE_KEY + movieId + REST_API_KEY + API_KEY;
     }
@@ -48,15 +56,19 @@ public class RequestFactory {
         return IMAGES_URL + IMAGE_PARAMS_QUERY + imageUrl;
     }
 
-    public GetImageTask createGetImageTask(String imageUrl, int reqWidth, int reqHeight) {
-        return new GetImageTask(createUrlImage(imageUrl), imageUrl, reqWidth, reqHeight);
+    public LoadImageTask createGetImageTask(String imageUrl, int reqWidth, int reqHeight) {
+        return new LoadImageTask(createUrlImage(imageUrl), imageUrl, reqWidth, reqHeight);
     }
 
-    public GetPopularMoviesTask createPopularMoviesTask(String pageId) {
-        return new GetPopularMoviesTask(createUrlPopularMovies(pageId), pageId);
+    public PopularMoviesTask createPopularMoviesTask(String pageId) {
+        return new PopularMoviesTask(createUrlPopularMovies(pageId), pageId);
     }
 
-    public GetDetailMovieTask createDetailMovieTask(String movieId) {
-        return new GetDetailMovieTask(createUrlDetailMovie(movieId), movieId);
+    public DetailMovieTask createDetailMovieTask(String movieId) {
+        return new DetailMovieTask(createUrlDetailMovie(movieId), movieId);
+    }
+
+    public SearchTask createSearchMovieTask(String query, String pageId) {
+        return new SearchTask(createUrlSearchMovies(query, pageId), query, pageId);
     }
 }

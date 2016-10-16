@@ -32,7 +32,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements ImageLoa
 
     private Movie mMovieEntity;
 
-    private PopulateMoviesListAdapter.OnClickListListener mListItemClickListener;
+    private MoviesListAdapter.OnClickListListener mListItemClickListener;
 
     public MovieViewHolder(View itemView) {
         super(itemView);
@@ -69,7 +69,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements ImageLoa
                 mBackDrop.getWidth(), mImageHeight, this);
     }
 
-    public void setmListItemClickListener(PopulateMoviesListAdapter.OnClickListListener listItemClickListener) {
+    public void setListItemClickListener(MoviesListAdapter.OnClickListListener listItemClickListener) {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

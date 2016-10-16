@@ -85,10 +85,12 @@ public class ResponseAdapter {
 
         JSONArray items = jsonObject.optJSONArray(RESULTS_KEY);
 
-        for (int i = 0; i < items.length(); i++) {
-            JSONObject obj = items.optJSONObject(i);
-            if (obj != null) {
-                foundItems.add(parseMovieDetail(obj));
+        if (items != null) {
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject obj = items.optJSONObject(i);
+                if (obj != null) {
+                    foundItems.add(parseMovieDetail(obj));
+                }
             }
         }
 

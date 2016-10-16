@@ -15,17 +15,19 @@ import ru.novikov.themoviedb.model.entity.Movie;
  * Created by Ivan on 09.10.2016.
  */
 
-public class PopulateMoviesListAdapter extends RecyclerView.Adapter {
+public class MoviesListAdapter extends RecyclerView.Adapter {
 
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
 
-    private static final int VISIBLE_THRESHOLD = 5;
+    private static final int UNDEFINE_PROGRESSBAR_POSITION = -1;
+
+    private static final int VISIBLE_THRESHOLD = 1;
 
     private List<Movie> mPopulateMovies = new ArrayList<>();
     private OnClickListListener mListItemClickListener;
     private boolean mIsLoading;
-    private int mProgressBarItemPosition = -1;
+    private int mProgressBarItemPosition = UNDEFINE_PROGRESSBAR_POSITION;
 
     public void showProgressBar() {
         mIsLoading = true;
@@ -43,10 +45,10 @@ public class PopulateMoviesListAdapter extends RecyclerView.Adapter {
     }
 
     public void updateList(List<Movie> movieList){
+        setLoaded();
         int oldPos = mPopulateMovies.size() - 1;
         mPopulateMovies.addAll(movieList);
-        notifyItemRangeInserted(oldPos, movieList.size());
-        setLoaded();
+        notifyItemRangeInserted(oldPos + 1, movieList.size());
         //notifyDataSetChanged();
     }
 
@@ -75,7 +77,7 @@ public class PopulateMoviesListAdapter extends RecyclerView.Adapter {
             MovieViewHolder movieViewHolder = (MovieViewHolder) holder;
             Movie movie = mPopulateMovies.get(position);
             movieViewHolder.bind(movie);
-            movieViewHolder.setmListItemClickListener(new OnClickListListener() {
+            movieViewHolder.setListItemClickListener(new OnClickListListener() {
                 @Override
                 public void onListClick(Movie movie) {
                     mListItemClickListener.onListClick(movie);
@@ -96,10 +98,11 @@ public class PopulateMoviesListAdapter extends RecyclerView.Adapter {
     }
 
     public void setLoaded() {
-        if (getItemViewType(mPopulateMovies.size() - 1) == VIEW_TYPE_LOADING){
-            mPopulateMovies.remove(mPopulateMovies.size() - 1);
-            notifyItemRemoved(mPopulateMovies.size());
-            mProgressBarItemPosition = -1;
+        if (mProgressBarItemPosition != UNDEFINE_PROGRESSBAR_POSITION &&
+                getItemViewType(mProgressBarItemPosition) == VIEW_TYPE_LOADING){
+            notifyItemRemoved(mProgressBarItemPosition);
+            mPopulateMovies.remove(mProgressBarItemPosition);
+            mProgressBarItemPosition = UNDEFINE_PROGRESSBAR_POSITION;
         }
         mIsLoading = false;
     }

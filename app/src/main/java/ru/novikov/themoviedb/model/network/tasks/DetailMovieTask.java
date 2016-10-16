@@ -9,13 +9,13 @@ import ru.novikov.themoviedb.model.network.ResponseAdapter;
  * Created by inovikov on 13.10.2016.
  */
 
-public class GetDetailMovieTask extends Task {
+public class DetailMovieTask extends Task {
 
     private final String mMovieId;
     private final String mRequestUrl;
     private Movie mMovie;
 
-    public GetDetailMovieTask(String requestUrl, String movieId) {
+    public DetailMovieTask(String requestUrl, String movieId) {
         super(TYPE_REQUEST_GET_MOVIE_DETAIL);
         mMovieId = movieId;
         mRequestUrl = requestUrl;
@@ -26,8 +26,13 @@ public class GetDetailMovieTask extends Task {
         return new Runnable() {
             public void run() {
                 JSONObject jsonObject = sHttpClient.requestWebService(mRequestUrl);
-                mMovie = ResponseAdapter.parseMovieDetail(jsonObject);
-                sRemoteProvider.handleState(GetDetailMovieTask.this, TASK_COMPLETE, mRequestType, mRequestId);
+                int taskResult = TASK_COMPLETE;
+                if (jsonObject != null) {
+                    mMovie = ResponseAdapter.parseMovieDetail(jsonObject);
+                } else {
+                    taskResult = TASK_ERROR;
+                }
+                sRemoteProvider.handleState(DetailMovieTask.this, taskResult, mRequestType, mRequestId);
             }
         };
     }

@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
  * Created by inovikov on 13.10.2016.
  */
 
-public class GetImageTask extends Task {
+public class LoadImageTask extends Task {
 
     private final String mRequestUrl;
     private final String mImageUrl;
@@ -15,7 +15,7 @@ public class GetImageTask extends Task {
 
     private Bitmap mResponseImage;
 
-    public GetImageTask(String requestUrl, String imageUrl, int reqWidth, int reqHeight) {
+    public LoadImageTask(String requestUrl, String imageUrl, int reqWidth, int reqHeight) {
         super(TYPE_REQUEST_GET_IMAGE);
         mRequestUrl = requestUrl;
         mImageUrl = imageUrl;
@@ -28,7 +28,7 @@ public class GetImageTask extends Task {
         return new Runnable() {
             public void run() {
                 mResponseImage = sHttpClient.downloadAndResizeBitmap(mRequestUrl, mReqWidth, mReqHeight);
-                sRemoteProvider.handleState(GetImageTask.this, TASK_COMPLETE, mRequestType, mRequestId);
+                sRemoteProvider.handleState(LoadImageTask.this, TASK_COMPLETE, mRequestType, mRequestId);
             }
         };
     }

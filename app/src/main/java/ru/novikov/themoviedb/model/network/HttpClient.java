@@ -25,6 +25,8 @@ public class HttpClient {
     private static final int CONNECTION_TIMEOUT = 30000;
     private static final int DATARETRIEVAL_TIMEOUT = 30000;
 
+    private static final String LOG_TAG = "HttpClient";
+
     private static HttpClient sInstance;
 
     public static HttpClient getsInstance() {
@@ -53,6 +55,7 @@ public class HttpClient {
                 // handle unauthorized (if service requires user login)
             } else if (statusCode != HttpURLConnection.HTTP_OK) {
                 // handle any other errors, like 404, 500,..
+                Log.e(LOG_TAG, "status code: " + statusCode);
             }
 
             // create JSON object from content

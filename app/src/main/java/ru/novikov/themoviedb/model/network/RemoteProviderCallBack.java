@@ -16,5 +16,5 @@ public interface RemoteProviderCallBack {
     void responsePopularMovies(List<Movie> movieList, int pageId);
     void responseImage(Bitmap bitmap, String imageUrl, int requestId);
     void responseError();
-
+    void responseSearchMovies(List<Movie> movieList, String searchQuery, int pageId);
 }
