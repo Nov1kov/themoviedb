@@ -9,12 +9,16 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpRetryException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.Scanner;
+
+import ru.novikov.themoviedb.model.network.errors.AppException;
+import ru.novikov.themoviedb.model.network.errors.BadJsonException;
+import ru.novikov.themoviedb.model.network.errors.BadUrlError;
+import ru.novikov.themoviedb.model.network.errors.HttpResponseError;
 
 /**
  * Created by Ivan on 08.10.2016.
@@ -39,7 +43,7 @@ public class HttpClient {
     public HttpClient() {
     }
 
-    public JSONObject requestWebService(String serviceUrl) {
+    public JSONObject requestWebService(String serviceUrl) throws AppException{
         HttpURLConnection urlConnection = null;
         try {
             // create connection
@@ -51,11 +55,9 @@ public class HttpClient {
 
             // handle issues
             int statusCode = urlConnection.getResponseCode();
-            if (statusCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                // handle unauthorized (if service requires user login)
-            } else if (statusCode != HttpURLConnection.HTTP_OK) {
-                // handle any other errors, like 404, 500,..
+            if (statusCode != HttpURLConnection.HTTP_OK) {
                 Log.e(LOG_TAG, "status code: " + statusCode);
+                throw new HttpResponseError(statusCode);
             }
 
             // create JSON object from content
@@ -66,6 +68,7 @@ public class HttpClient {
         } catch (MalformedURLException e) {
             // URL is invalid
             e.printStackTrace();
+            throw new BadUrlError(serviceUrl);
         } catch (SocketTimeoutException e) {
             // data retrieval or connection timed out
             e.printStackTrace();
@@ -76,6 +79,7 @@ public class HttpClient {
         } catch (JSONException e) {
             // response body is no valid JSON string
             e.printStackTrace();
+            throw new BadJsonException(serviceUrl);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();

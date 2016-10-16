@@ -9,6 +9,6 @@ public interface View {
     /* progress bar */
     void showLoading(boolean shown);
     /* error messages */
-    void showError(String msg);
+    void showError(String msg, String errorMessage);
 
 }

@@ -14,7 +14,7 @@ import ru.novikov.themoviedb.presenter.basepresenters.Presenter;
  * Created by Ivan on 08.10.2016.
  */
 
-public abstract class BaseActivity<T extends Presenter> extends AppCompatActivity implements View{
+public abstract class BaseActivity<T extends Presenter> extends AppCompatActivity implements View {
 
     public final static String FRAGMENT_PRESENTER_TAG = "fragment_presenter_tag";
     public String mPosterTransitionName;
@@ -41,10 +41,10 @@ public abstract class BaseActivity<T extends Presenter> extends AppCompatActivit
     }
 
     @Override
-    public void showError(String msg) {
+    public void showError(String titleMsg, String errorMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.error_connection_title);
-        builder.setMessage(R.string.error_connection_message);
+        builder.setTitle(titleMsg);
+        builder.setMessage(errorMessage);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

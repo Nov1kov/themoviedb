@@ -47,6 +47,8 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     private int mBackdropHeight;
     private int mMovieId;
     private Scene scene2;
+    private View mTitleContainer;
+    private View mProgressBar;
 
     @Override
     protected MovieDetailPresenterImpl createInstancePresenter() {
@@ -67,6 +69,9 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mTitleContainer = findViewById(R.id.title_container);
+        mProgressBar = findViewById(R.id.progress_bar);
 
         mBackdrop = (ImageView) findViewById(R.id.backdrop);
         mTitleTextView = (TextView) findViewById(R.id.title);
@@ -115,6 +120,9 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
 
     @Override
     public void updateInfo(Movie movie) {
+
+        mTitleContainer.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
 
         mTitleTextView.setText(movie.title);
         mRatingTextView.setText(String.format("%.1f", movie.voteAverage));

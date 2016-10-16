@@ -4,6 +4,7 @@ import java.util.Random;
 
 import ru.novikov.themoviedb.model.network.HttpClient;
 import ru.novikov.themoviedb.model.network.RemoteProvider;
+import ru.novikov.themoviedb.model.network.errors.AppException;
 
 /**
  * Created by inovikov on 13.10.2016.
@@ -21,6 +22,7 @@ public abstract class Task {
 
     protected final int mRequestType;
     protected final int mRequestId;
+    protected AppException mException = null;
 
     protected static HttpClient sHttpClient = HttpClient.getsInstance();
     protected static RemoteProvider sRemoteProvider = RemoteProvider.getInstance();
@@ -43,6 +45,10 @@ public abstract class Task {
     private static int generateRequestId() {
         Random r = new Random();
         return r.nextInt(Integer.MAX_VALUE);
+    }
+
+    public AppException getException() {
+        return mException;
     }
 
 }

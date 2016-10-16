@@ -13,7 +13,8 @@ public class RequestFactory {
 
     private static final String API_KEY = "72b56103e43843412a992a8d64bf96e9";
 
-    private static final String SERVICE_URL = "https://api.themoviedb.org/";
+    public static final String SERVICE_URL = "https://api.themoviedb.org/";
+
     private static final String IMAGES_URL = "https://image.tmdb.org/";
     private static final String IMAGE_PARAMS_QUERY = "t/p/w500";
     private static final String REST_VERSION = "3/";

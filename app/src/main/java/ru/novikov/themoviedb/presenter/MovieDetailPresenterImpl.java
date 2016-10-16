@@ -8,6 +8,7 @@ import java.util.List;
 import ru.novikov.themoviedb.model.DataProviderCallBacks;
 import ru.novikov.themoviedb.model.ImageLoadListenerController;
 import ru.novikov.themoviedb.model.entity.Movie;
+import ru.novikov.themoviedb.model.network.errors.AppException;
 import ru.novikov.themoviedb.presenter.basepresenters.MovieDetailPresenter;
 import ru.novikov.themoviedb.presenter.basepresenters.PresenterFragment;
 import ru.novikov.themoviedb.view.baseviews.MovieDetailView;
@@ -59,7 +60,7 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
     }
 
     @Override
-    public void onResponseError() {
+    public void onResponseBitmapError() {
 
     }
 

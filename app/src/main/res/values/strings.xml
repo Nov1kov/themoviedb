@@ -12,5 +12,11 @@
     <string name="empty_popular_movies">No popular movies</string>
     <string name="empty_enter_search_text">Enter text for search movies</string>
     <string name="empty_search_not_results">Search for quesry \"%s\" has not results</string>
+    <string name="error_title_server">Server error %d</string>
+    <string name="error_message_server">Server %s is broken, may be later it is repaired</string>
+    <string name="error_msg_url_invalid">%s is invalid, wait a while, or contact with developer</string>
+    <string name="error_title_url_invalid">Url is invalid</string>
+    <string name="error_title_bad_json">Bad response from server</string>
+    <string name="error_msg_bad_json">Response from %s is bad, possibly server was change contract, please contact with developer</string>
 
 </resources>

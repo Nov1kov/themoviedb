@@ -6,6 +6,7 @@ import java.util.List;
 
 import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.model.network.ResponseAdapter;
+import ru.novikov.themoviedb.model.network.errors.AppException;
 
 /**
  * Created by inovikov on 13.10.2016.
@@ -28,8 +29,14 @@ public class PopularMoviesTask extends Task {
     public Runnable getRunnable() {
         return new Runnable() {
             public void run() {
-                JSONObject jsonObject = sHttpClient.requestWebService(mRequestUrl);
                 int taskResult = TASK_COMPLETE;
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = sHttpClient.requestWebService(mRequestUrl);
+                } catch (AppException e) {
+                    taskResult = TASK_ERROR;
+                    mException = e;
+                }
                 if (jsonObject != null) {
                     mTotalPages = ResponseAdapter.parseTotalPages(jsonObject);
                     mMovieList = ResponseAdapter.parseMoviesList(jsonObject);

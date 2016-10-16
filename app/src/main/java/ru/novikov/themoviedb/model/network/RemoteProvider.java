@@ -78,7 +78,8 @@ public class RemoteProvider {
                             case Task.TYPE_REQUEST_GET_SEARCH_MOVIES:
                                 if (msg.obj instanceof SearchTask) {
                                     SearchTask searchTask = (SearchTask) msg.obj;
-                                    //mMoviesCache.putMoviesList(popularMoviesTask.getMovieList(),
+                                    // todo cache search results?
+                                    // mMoviesCache.putMoviesList(popularMoviesTask.getMovieList(),
                                             //popularMoviesTask.getPageId());
                                     mRemoteProviderListener.responseSearchMovies(searchTask.getMovieList(),
                                             searchTask.getSearchQuery(),
@@ -90,7 +91,8 @@ public class RemoteProvider {
                         break;
 
                     case Task.TASK_ERROR:
-                        mRemoteProviderListener.responseError();
+                        Task task = (Task) msg.obj;
+                        mRemoteProviderListener.responseError(task.getException());
                         break;
                 }
 

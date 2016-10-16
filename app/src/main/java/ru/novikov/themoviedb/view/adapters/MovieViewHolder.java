@@ -87,7 +87,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder implements ImageLoa
     }
 
     @Override
-    public void onResponseError() {
+    public void onResponseBitmapError() {
 
     }
 

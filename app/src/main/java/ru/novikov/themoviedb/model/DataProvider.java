@@ -2,17 +2,16 @@ package ru.novikov.themoviedb.model;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.model.memorycache.ImagesCache;
-import ru.novikov.themoviedb.model.memorycache.MoviesCache;
 import ru.novikov.themoviedb.model.network.RemoteProvider;
 import ru.novikov.themoviedb.model.network.RemoteProviderCallBack;
 import ru.novikov.themoviedb.model.network.ResponseAdapter;
+import ru.novikov.themoviedb.model.network.errors.AppException;
 
 /**
  * Created by Ivan on 08.10.2016.
@@ -101,16 +100,16 @@ public class DataProvider implements RemoteProviderCallBack {
             if (bitmap != null) {
                 bitmapListener.onResponseBitmap(bitmap);
             } else {
-                bitmapListener.onResponseError();
+                bitmapListener.onResponseBitmapError();
             }
             mImageListenerController.remove(bitmapListener);
         }
     }
 
     @Override
-    public void responseError() {
+    public void responseError(AppException exception) {
         for (DataProviderCallBacks subscriber: mDataProviderCallBacksList) {
-            subscriber.responseError(null);
+            subscriber.responseError(exception);
         }
     }
 

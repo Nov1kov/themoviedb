@@ -7,6 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import ru.novikov.themoviedb.model.entity.Movie;
+import ru.novikov.themoviedb.model.network.errors.AppException;
 
 
 /**
@@ -30,6 +31,6 @@ public interface DataProviderCallBacks {
                             int pageId,
                             String query,
                             int totalPages);
-    void responseError(String errorMessage);
+    void responseError(AppException exception);
 
 }
