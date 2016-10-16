@@ -17,6 +17,8 @@ import ru.novikov.themoviedb.view.baseviews.View;
 public abstract class PresenterFragment<T extends View> extends Fragment implements DataProviderCallBacks, Presenter {
 
     protected T view;
+    @DataProviderCallBacks.TypeInfoDataProvider
+    protected int mTypeInfoReceiver;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,5 +46,10 @@ public abstract class PresenterFragment<T extends View> extends Fragment impleme
     @Override
     public void responseError(String errorMessage) {
         view.showError(errorMessage);
+    }
+
+    @Override
+    public void setTypeInfoReceiver(@DataProviderCallBacks.TypeInfoDataProvider int typeInfoReceiver) {
+        mTypeInfoReceiver = typeInfoReceiver;
     }
 }

@@ -1,6 +1,9 @@
 package ru.novikov.themoviedb.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -8,6 +11,7 @@ import ru.novikov.themoviedb.App;
 import ru.novikov.themoviedb.model.DataProviderCallBacks;
 import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.model.network.RemoteProvider;
+import ru.novikov.themoviedb.model.network.ResponseAdapter;
 import ru.novikov.themoviedb.presenter.basepresenters.MoviesListPresenter;
 import ru.novikov.themoviedb.presenter.basepresenters.PresenterFragment;
 import ru.novikov.themoviedb.view.baseviews.MoviesListView;
@@ -20,6 +24,7 @@ public class MoviesListPresenterImpl extends PresenterFragment<MoviesListView> i
 
     private int mLastPageLoad = RemoteProvider.FIRST_PAGE_ID;
     private String mSearchQuery;
+    private int mTotalPages = ResponseAdapter.UNDEFINED_TOTAL_PAGES;
 
     @Override
     public void onAttach(Context context) {
@@ -36,8 +41,12 @@ public class MoviesListPresenterImpl extends PresenterFragment<MoviesListView> i
 
     @Override
     public void loadSearchList(String query) {
-        mSearchQuery = query;
-        getDataProvider().getSearchMovies(query, RemoteProvider.FIRST_PAGE_ID);
+        if (!TextUtils.isEmpty(query) && !query.equals(mSearchQuery)) {
+            view.clearList();
+            mSearchQuery = query;
+            mLastPageLoad = RemoteProvider.FIRST_PAGE_ID;
+            getDataProvider().getSearchMovies(query, RemoteProvider.FIRST_PAGE_ID);
+        }
     }
 
     @Override
@@ -46,20 +55,28 @@ public class MoviesListPresenterImpl extends PresenterFragment<MoviesListView> i
     }
 
     @Override
-    public void loadMore() {
-        mLastPageLoad++;
-        getContentToList(mLastPageLoad);
+    public boolean loadMore() {
+        if (mTotalPages > mLastPageLoad) {
+            mLastPageLoad++;
+            getContentToList(mLastPageLoad);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void responseSuccessful(@DataProviderCallBacks.TypeInfoDataProvider int typeInfo,
-                                   Movie movie, List<Movie> movies, int pageId, String query) {
+                                   Movie movie, List<Movie> movies, int pageId, String query,
+                                   int totalPages) {
         switch (typeInfo) {
             case TYPE_INFO_POPULAR_MOVIES:
             case TYPE_INFO_SEARCH_MOVIES:
-                view.updateList(movies);
-                if (pageId < mLastPageLoad) {
-                    getContentToList(pageId + 1);
+                if (mTypeInfoReceiver == typeInfo) {
+                    mTotalPages = totalPages;
+                    view.updateList(movies);
+                    if (pageId < mLastPageLoad) {
+                        getContentToList(pageId + 1);
+                    }
                 }
                 break;
             case DataProviderCallBacks.TYPE_INFO_MOVIE_DETAIL:

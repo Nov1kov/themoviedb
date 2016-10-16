@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.novikov.themoviedb.R;
+import ru.novikov.themoviedb.model.DataProviderCallBacks;
 import ru.novikov.themoviedb.model.entity.Genre;
 import ru.novikov.themoviedb.model.entity.Movie;
 import ru.novikov.themoviedb.model.entity.ProductionCountry;
@@ -55,6 +56,7 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter.setTypeInfoReceiver(DataProviderCallBacks.TYPE_INFO_MOVIE_DETAIL);
         setContentView(R.layout.activity_movie_detail);
         setTitle(null);
 

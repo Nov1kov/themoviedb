@@ -22,8 +22,10 @@ import ru.novikov.themoviedb.model.entity.ProductionCountry;
  */
 public class ResponseAdapter {
 
+    public static final int UNDEFINED_TOTAL_PAGES = Integer.MAX_VALUE;
 
     private static final String RESULTS_KEY = "results";
+    private static final String TOTAL_PAGES_KEY = "total_pages";
 
     public static Movie parseMovieDetail(JSONObject jsonObject) {
         Movie movie = new Movie();
@@ -80,11 +82,8 @@ public class ResponseAdapter {
     }
 
     public static List<Movie> parseMoviesList(JSONObject jsonObject) {
-
         List<Movie> foundItems = new ArrayList<>();
-
         JSONArray items = jsonObject.optJSONArray(RESULTS_KEY);
-
         if (items != null) {
             for (int i = 0; i < items.length(); i++) {
                 JSONObject obj = items.optJSONObject(i);
@@ -93,8 +92,11 @@ public class ResponseAdapter {
                 }
             }
         }
-
         return foundItems;
+    }
+
+    public static int parseTotalPages(JSONObject jsonObject) {
+        return jsonObject.optInt(TOTAL_PAGES_KEY, UNDEFINED_TOTAL_PAGES);
     }
 
     /**

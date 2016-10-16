@@ -65,7 +65,8 @@ public class MovieDetailPresenterImpl extends PresenterFragment<MovieDetailView>
 
     @Override
     public void responseSuccessful(@DataProviderCallBacks.TypeInfoDataProvider int typeInfo,
-                                   Movie movie, List<Movie> movies, int pageId, String query) {
+                                   Movie movie, List<Movie> movies, int pageId, String query,
+                                   int totalPages) {
         switch (typeInfo) {
             case DataProviderCallBacks.TYPE_INFO_MOVIE_DETAIL:
                 mCurrentMovie = movie;

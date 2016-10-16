@@ -9,5 +9,8 @@
     <string name="search">Search</string>
     <string name="transition_name_poster">moviePoster</string>
     <string name="transition_name_rating">movieRating</string>
+    <string name="empty_popular_movies">No popular movies</string>
+    <string name="empty_enter_search_text">Enter text for search movies</string>
+    <string name="empty_search_not_results">Search for quesry \"%s\" has not results</string>
 
 </resources>

@@ -13,8 +13,8 @@ import ru.novikov.themoviedb.model.entity.Movie;
 public interface RemoteProviderCallBack {
 
     void responseMovieDetail(Movie movie);
-    void responsePopularMovies(List<Movie> movieList, int pageId);
     void responseImage(Bitmap bitmap, String imageUrl, int requestId);
     void responseError();
-    void responseSearchMovies(List<Movie> movieList, String searchQuery, int pageId);
+    void responseSearchMovies(List<Movie> movieList, String searchQuery, int pageId, int totalPages);
+    void responsePopularMovies(List<Movie> movieList, int pageId, int totalPages);
 }

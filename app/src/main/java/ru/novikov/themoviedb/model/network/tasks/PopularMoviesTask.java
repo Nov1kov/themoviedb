@@ -16,6 +16,7 @@ public class PopularMoviesTask extends Task {
     private final String mPageId;
     private final String mRequestUrl;
     private List<Movie> mMovieList;
+    private int mTotalPages = ResponseAdapter.UNDEFINED_TOTAL_PAGES;
 
     public PopularMoviesTask(String requestUrl, String pageId) {
         super(TYPE_REQUEST_GET_POPULAR_MOVIES);
@@ -30,6 +31,7 @@ public class PopularMoviesTask extends Task {
                 JSONObject jsonObject = sHttpClient.requestWebService(mRequestUrl);
                 int taskResult = TASK_COMPLETE;
                 if (jsonObject != null) {
+                    mTotalPages = ResponseAdapter.parseTotalPages(jsonObject);
                     mMovieList = ResponseAdapter.parseMoviesList(jsonObject);
                 } else {
                     taskResult = TASK_ERROR;
@@ -49,5 +51,9 @@ public class PopularMoviesTask extends Task {
 
     public List<Movie> getMovieList() {
         return mMovieList;
+    }
+
+    public int getTotalPages() {
+        return mTotalPages;
     }
 }

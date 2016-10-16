@@ -9,6 +9,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Scene;
 import android.transition.TransitionManager;
+import android.view.*;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -29,6 +32,7 @@ abstract public class BaseListActivity extends BaseActivity<MoviesListPresenter>
     protected RecyclerView mListView;
     protected MoviesListAdapter mListAdapter;
     protected GridLayoutManager mGridLayoutManager;
+    protected TextView mEmptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +60,13 @@ abstract public class BaseListActivity extends BaseActivity<MoviesListPresenter>
                 int totalItemCount = mGridLayoutManager.getItemCount();
                 int lastVisibleItem = mGridLayoutManager.findLastVisibleItemPosition();
 
-                if (mListAdapter.needLoadedMore(totalItemCount, lastVisibleItem)) {
-                    mPresenter.loadMore();
+                if (mListAdapter.needLoadedMore(totalItemCount, lastVisibleItem) &&
+                        mPresenter.loadMore()) {
                     mListAdapter.showProgressBar();
                 }
             }
         });
+        mEmptyTextView = (TextView) findViewById(R.id.emptyText);
     }
 
     @Override
@@ -70,8 +75,19 @@ abstract public class BaseListActivity extends BaseActivity<MoviesListPresenter>
     }
 
     @Override
+    public void clearList() {
+        mListAdapter.clear();
+    }
+
+    @Override
     public void updateList(List<Movie> movieList) {
+        emptyList(mListAdapter.getItemCount() == 0 && movieList.size() == 0);
         mListAdapter.updateList(movieList);
+    }
+
+    protected void emptyList(boolean state) {
+        mListView.setVisibility(!state ? View.VISIBLE : View.GONE);
+        mEmptyTextView.setVisibility(state ? View.VISIBLE : View.GONE);
     }
 
     @Override

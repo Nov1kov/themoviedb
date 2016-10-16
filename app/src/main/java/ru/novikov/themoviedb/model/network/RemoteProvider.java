@@ -54,7 +54,8 @@ public class RemoteProvider {
                                     mMoviesCache.putMoviesList(popularMoviesTask.getMovieList(),
                                             popularMoviesTask.getPageId());
                                     mRemoteProviderListener.responsePopularMovies(popularMoviesTask.getMovieList(),
-                                            popularMoviesTask.getPageId());
+                                            popularMoviesTask.getPageId(),
+                                            popularMoviesTask.getTotalPages());
                                 }
                                 break;
 
@@ -81,7 +82,8 @@ public class RemoteProvider {
                                             //popularMoviesTask.getPageId());
                                     mRemoteProviderListener.responseSearchMovies(searchTask.getMovieList(),
                                             searchTask.getSearchQuery(),
-                                            searchTask.getPageId());
+                                            searchTask.getPageId(),
+                                            searchTask.getTotalPages());
                                 }
                                 break;
                         }
@@ -108,7 +110,7 @@ public class RemoteProvider {
 
         List<Movie> movieList = mMoviesCache.getMoviesList(pageId);
         if (movieList.size() == RemoteProvider.MOVIES_PAGE_SIZE) {
-            mRemoteProviderListener.responsePopularMovies(movieList, pageId);
+            mRemoteProviderListener.responsePopularMovies(movieList, pageId, ResponseAdapter.UNDEFINED_TOTAL_PAGES);
             return CACHED_REQUEST_ID;
         } else {
             PopularMoviesTask getImageTask = mRequestFactory.createPopularMoviesTask(Integer.toString(pageId));

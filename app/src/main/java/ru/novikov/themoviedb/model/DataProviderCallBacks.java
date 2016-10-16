@@ -24,7 +24,12 @@ public interface DataProviderCallBacks {
     int TYPE_INFO_POPULAR_MOVIES = 1;
     int TYPE_INFO_SEARCH_MOVIES = 2;
 
-    void responseSuccessful(@TypeInfoDataProvider int typeInfo, Movie movie, List<Movie> movies, int pageId, String query);
+    void responseSuccessful(@TypeInfoDataProvider int typeInfo,
+                            Movie movie,
+                            List<Movie> movies,
+                            int pageId,
+                            String query,
+                            int totalPages);
     void responseError(String errorMessage);
 
 }

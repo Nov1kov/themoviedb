@@ -24,20 +24,24 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
 
     private static final int VISIBLE_THRESHOLD = 1;
 
-    private List<Movie> mPopulateMovies = new ArrayList<>();
+    private List<Movie> mMovies = new ArrayList<>();
     private OnClickListListener mListItemClickListener;
     private boolean mIsLoading;
     private int mProgressBarItemPosition = UNDEFINE_PROGRESSBAR_POSITION;
 
     public void showProgressBar() {
         mIsLoading = true;
-        mPopulateMovies.add(null);
-        mProgressBarItemPosition = mPopulateMovies.size() - 1;
+        mMovies.add(null);
+        mProgressBarItemPosition = mMovies.size() - 1;
         notifyItemInserted(mProgressBarItemPosition);
     }
 
     public int getProgressItemPosition() {
         return mProgressBarItemPosition;
+    }
+
+    public void clear() {
+        mMovies.clear();
     }
 
     public interface OnClickListListener {
@@ -46,15 +50,15 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
 
     public void updateList(List<Movie> movieList){
         setLoaded();
-        int oldPos = mPopulateMovies.size() - 1;
-        mPopulateMovies.addAll(movieList);
+        int oldPos = mMovies.size() - 1;
+        mMovies.addAll(movieList);
         notifyItemRangeInserted(oldPos + 1, movieList.size());
         //notifyDataSetChanged();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mPopulateMovies.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mMovies.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     @Override
@@ -75,7 +79,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MovieViewHolder) {
             MovieViewHolder movieViewHolder = (MovieViewHolder) holder;
-            Movie movie = mPopulateMovies.get(position);
+            Movie movie = mMovies.get(position);
             movieViewHolder.bind(movie);
             movieViewHolder.setListItemClickListener(new OnClickListListener() {
                 @Override
@@ -101,7 +105,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
         if (mProgressBarItemPosition != UNDEFINE_PROGRESSBAR_POSITION &&
                 getItemViewType(mProgressBarItemPosition) == VIEW_TYPE_LOADING){
             notifyItemRemoved(mProgressBarItemPosition);
-            mPopulateMovies.remove(mProgressBarItemPosition);
+            mMovies.remove(mProgressBarItemPosition);
             mProgressBarItemPosition = UNDEFINE_PROGRESSBAR_POSITION;
         }
         mIsLoading = false;
@@ -109,6 +113,6 @@ public class MoviesListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mPopulateMovies != null ? mPopulateMovies.size() : 0;
+        return mMovies != null ? mMovies.size() : 0;
     }
 }

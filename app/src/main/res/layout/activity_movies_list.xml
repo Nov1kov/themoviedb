@@ -4,7 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:paddingTop="@dimen/search_list_padding_top"
+        android:drawablePadding="@dimen/search_list_drawable_padding"
+        android:visibility="visible"
+        android:gravity="center"
+        android:id="@+id/emptyText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
     <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

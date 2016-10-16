@@ -12,6 +12,7 @@ import ru.novikov.themoviedb.model.memorycache.ImagesCache;
 import ru.novikov.themoviedb.model.memorycache.MoviesCache;
 import ru.novikov.themoviedb.model.network.RemoteProvider;
 import ru.novikov.themoviedb.model.network.RemoteProviderCallBack;
+import ru.novikov.themoviedb.model.network.ResponseAdapter;
 
 /**
  * Created by Ivan on 08.10.2016.
@@ -41,9 +42,10 @@ public class DataProvider implements RemoteProviderCallBack {
     }
 
     private void sendResponseToSubscribers(@DataProviderCallBacks.TypeInfoDataProvider int typeInfo,
-                                           Movie movie, List<Movie> movies, int pageId, String query) {
+                                           Movie movie, List<Movie> movies, int pageId,
+                                           String query, int totalPages) {
         for (DataProviderCallBacks subscriber : mDataProviderCallBacksList) {
-            subscriber.responseSuccessful(typeInfo, movie, movies, pageId, query);
+            subscriber.responseSuccessful(typeInfo, movie, movies, pageId, query, totalPages);
         }
     }
 
@@ -113,21 +115,20 @@ public class DataProvider implements RemoteProviderCallBack {
     }
 
     @Override
-    public void responseSearchMovies(List<Movie> movieList, String searchQuery, int pageId) {
+    public void responseSearchMovies(List<Movie> movieList, String searchQuery, int pageId, int totalPages) {
         sendResponseToSubscribers(DataProviderCallBacks.TYPE_INFO_SEARCH_MOVIES,
-                null, movieList, pageId, searchQuery);
+                null, movieList, pageId, searchQuery, totalPages);
+    }
+
+    @Override
+    public void responsePopularMovies(@NonNull List<Movie> movieList, int pageId, int totalPages) {
+        sendResponseToSubscribers(DataProviderCallBacks.TYPE_INFO_POPULAR_MOVIES,
+                null, movieList, pageId, null, totalPages);
     }
 
     @Override
     public void responseMovieDetail(@NonNull Movie movie) {
         sendResponseToSubscribers(DataProviderCallBacks.TYPE_INFO_MOVIE_DETAIL,
-                movie, null, DataProviderCallBacks.UNDEFINED_PAGE_ID, null);
+                movie, null, DataProviderCallBacks.UNDEFINED_PAGE_ID, null, ResponseAdapter.UNDEFINED_TOTAL_PAGES);
     }
-
-    @Override
-    public void responsePopularMovies(@NonNull List<Movie> movieList, int pageId) {
-        sendResponseToSubscribers(DataProviderCallBacks.TYPE_INFO_POPULAR_MOVIES,
-                null, movieList, pageId, null);
-    }
-
 }

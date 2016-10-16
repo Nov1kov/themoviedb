@@ -9,5 +9,5 @@ public interface MoviesListPresenter extends Presenter {
     void loadList();
     void loadSearchList(String query);
     void clearListeners();
-    void loadMore();
+    boolean loadMore();
 }

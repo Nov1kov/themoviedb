@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.novikov.themoviedb.R;
+import ru.novikov.themoviedb.model.DataProviderCallBacks;
 import ru.novikov.themoviedb.presenter.MoviesListPresenterImpl;
 import ru.novikov.themoviedb.view.baseviews.BaseListActivity;
 
@@ -19,7 +20,9 @@ public class MoviesListActivity extends BaseListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter.setTypeInfoReceiver(DataProviderCallBacks.TYPE_INFO_POPULAR_MOVIES);
         mPresenter.loadList();
+        mEmptyTextView.setText(R.string.empty_popular_movies);
     }
 
     @Override

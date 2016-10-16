@@ -11,5 +11,5 @@ import ru.novikov.themoviedb.model.entity.Movie;
 public interface MoviesListView extends View{
 
     void updateList(List<Movie> movieList);
-
+    void clearList();
 }

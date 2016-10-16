@@ -9,11 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.novikov.themoviedb.R;
+import ru.novikov.themoviedb.model.DataProviderCallBacks;
 import ru.novikov.themoviedb.presenter.MoviesListPresenterImpl;
 import ru.novikov.themoviedb.view.baseviews.BaseListActivity;
 import ru.novikov.themoviedb.view.utils.UiTools;
 
 public class SearchActivity extends BaseListActivity implements SearchView.OnQueryTextListener {
+
+    private String mSearchQuery;
 
     @Override
     protected Fragment createInstancePresenter() {
@@ -25,8 +28,10 @@ public class SearchActivity extends BaseListActivity implements SearchView.OnQue
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
+        mPresenter.setTypeInfoReceiver(DataProviderCallBacks.TYPE_INFO_SEARCH_MOVIES);
+        mEmptyTextView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_search_black_48dp, 0, 0);
+        mEmptyTextView.setText(R.string.empty_enter_search_text);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -39,11 +44,9 @@ public class SearchActivity extends BaseListActivity implements SearchView.OnQue
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
-
         // Associate searchable configuration with the SearchView
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
@@ -57,9 +60,16 @@ public class SearchActivity extends BaseListActivity implements SearchView.OnQue
         if (!TextUtils.isEmpty(query)) {
             mPresenter.loadSearchList(query);
             UiTools.hideKeyBoard(this);
+            mSearchQuery = query;
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void emptyList(boolean state) {
+        super.emptyList(state);
+        mEmptyTextView.setText(getString(R.string.empty_search_not_results, mSearchQuery));
     }
 
     @Override

@@ -17,6 +17,7 @@ public class SearchTask extends Task {
     private final String mRequestUrl;
     private final String mSearchQuery;
     private List<Movie> mMovieList;
+    private int mTotalPages = ResponseAdapter.UNDEFINED_TOTAL_PAGES;
 
     public SearchTask(String urlSearchMovies, String query, String pageId) {
         super(TYPE_REQUEST_GET_SEARCH_MOVIES);
@@ -32,6 +33,7 @@ public class SearchTask extends Task {
                 JSONObject jsonObject = sHttpClient.requestWebService(mRequestUrl);
                 int taskResult = TASK_COMPLETE;
                 if (jsonObject != null) {
+                    mTotalPages = ResponseAdapter.parseTotalPages(jsonObject);
                     mMovieList = ResponseAdapter.parseMoviesList(jsonObject);
                 } else {
                     taskResult = TASK_ERROR;
@@ -51,5 +53,9 @@ public class SearchTask extends Task {
 
     public String getSearchQuery() {
         return mSearchQuery;
+    }
+
+    public int getTotalPages() {
+        return mTotalPages;
     }
 }

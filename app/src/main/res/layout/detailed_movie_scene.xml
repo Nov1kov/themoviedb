@@ -41,10 +41,10 @@
 
     <Button
         android:id="@+id/homepage"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/movie_detail_max_width_homepage"
         android:layout_height="@dimen/movie_detail_homepage_height"
+        android:layout_gravity="center_horizontal"
         android:background="@color/colorAccent"
-        android:maxWidth="@dimen/movie_detail_max_width_homepage"
         android:text="@string/go_to_homepage"
         android:textAllCaps="false"
         android:textColor="@color/colorRating"
