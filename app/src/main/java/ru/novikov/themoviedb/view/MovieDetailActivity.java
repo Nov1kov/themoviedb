@@ -1,11 +1,14 @@
 package ru.novikov.themoviedb.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.transition.Fade;
@@ -102,9 +105,17 @@ public class MovieDetailActivity extends BaseActivity<MovieDetailPresenter> impl
             public void onClick(View v) {
                 if (mPresenter.getCurrentMovie() != null) {
                     String url = mPresenter.getCurrentMovie().homepage;
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        builder.setToolbarColor(ContextCompat.getColor(MovieDetailActivity.this, R.color.colorPrimary));
+                        builder.addDefaultShareMenuItem();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        customTabsIntent.launchUrl(MovieDetailActivity.this, Uri.parse(url));
+                    } else {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                    }
                 }
             }
         });
